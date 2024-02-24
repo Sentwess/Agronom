@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/routes"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="com.example.agronom.MainFragment"
+        android:label="Агроном"
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragment_to_culturesFragment"
+            app:destination="@id/culturesFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_fieldsFragment"
+            app:destination="@id/fieldsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_harvestFragment"
+            app:destination="@id/harvestFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_sowingsFragment"
+            app:destination="@id/sowingsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/culturesFragment"
+        android:name="com.example.agronom.CulturesFragment"
+        android:label="@string/cultures_string"
+        tools:layout="@layout/fragment_cultures" />
+    <fragment
+        android:id="@+id/fieldsFragment"
+        android:name="com.example.agronom.FieldsFragment"
+        android:label="@string/fields_string"
+        tools:layout="@layout/fragment_fields" />
+    <fragment
+        android:id="@+id/harvestFragment"
+        android:name="com.example.agronom.HarvestFragment"
+        android:label="@string/harvest_string"
+        tools:layout="@layout/fragment_harvest" />
+    <fragment
+        android:id="@+id/sowingsFragment"
+        android:name="com.example.agronom.SowingsFragment"
+        android:label="@string/sowings_string"
+        tools:layout="@layout/fragment_sowings" />
+</navigation>

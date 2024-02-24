@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cultures_string">Культуры</string>
+    <string name="fields_string">Поля</string>
+    <string name="harvest_string">Урожай</string>
+    <string name="sowings_string">Посевы</string>
+</resources>

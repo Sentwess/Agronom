@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Agronom</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cultures_string">Культуры</string>
+    <string name="fields_string">Поля</string>
+    <string name="harvest_string">Урожай</string>
+    <string name="sowings_string">Посевы</string>
+</resources>
