@@ -4,4 +4,7 @@
     <string name="fields_string">Поля</string>
     <string name="harvest_string">Урожай</string>
     <string name="sowings_string">Посевы</string>
+    <string name="enter_your_email">Введите email</string>
+    <string name="enter_your_pass">Введите пароль</string>
+    <string name="re_enter_your_pass">Введите повторно пароль</string>
 </resources>
