@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "520189790000",
+    "project_id": "agronom-e52c4",
+    "storage_bucket": "agronom-e52c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:520189790000:android:8651824c4bc00379792af5",
+        "android_client_info": {
+          "package_name": "com.example.agronom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxZPpEOtP9E7Rgm3Sd0VQdbGj1gL1Rht0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
