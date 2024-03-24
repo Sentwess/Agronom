@@ -7,4 +7,9 @@
     <string name="enter_your_email">Введите email</string>
     <string name="enter_your_pass">Введите пароль</string>
     <string name="re_enter_your_pass">Введите повторно пароль</string>
+    <string-array name="sort">
+        <item>Без</item>
+        <item>По убыванию</item>
+        <item>По возростанию</item>
+    </string-array>
 </resources>

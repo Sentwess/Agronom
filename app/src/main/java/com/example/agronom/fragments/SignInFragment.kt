@@ -44,7 +44,7 @@ class SignInFragment : Fragment() {
 
                 loginUser(email, pass)
             else
-                Toast.makeText(context, "Empty fields are not allowed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Введите почту и пароль", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -53,7 +53,7 @@ class SignInFragment : Fragment() {
             if (it.isSuccessful)
                 navController.navigate(R.id.action_signInFragment_to_mainFragment)
             else
-                Toast.makeText(context, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Неверно указана почта или пароль", Toast.LENGTH_SHORT).show()
 
         }
     }
