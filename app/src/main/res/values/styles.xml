@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MyEditTextStyle" parent="@android:style/TextAppearance.Widget.EditText">
+        <item name="android:background">@null</item> //NO UNDERBAR
+        <item name="android:maxLines">1</item>
+        <item name="android:height">28dp</item> //COMMON HEIGHT
+    </style>
+</resources>

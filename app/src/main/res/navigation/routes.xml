@@ -27,7 +27,11 @@
         android:id="@+id/culturesFragment"
         android:name="com.example.agronom.fragments.CulturesFragment"
         android:label="@string/cultures_string"
-        tools:layout="@layout/fragment_cultures" />
+        tools:layout="@layout/fragment_cultures" >
+        <action
+            android:id="@+id/action_culturesFragment_to_cultureDetailFragment"
+            app:destination="@id/cultureDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fieldsFragment"
         android:name="com.example.agronom.fragments.FieldsFragment"
@@ -84,5 +88,17 @@
             app:destination="@id/mainFragment"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/cultureDetailFragment"
+        android:name="com.example.agronom.fragments.CultureDetailFragment"
+        android:label="fragment_culture_detail"
+        tools:layout="@layout/fragment_culture_detail" >
+        <argument
+            android:name="currentCulture"
+            app:argType="com.example.agronom.data.Cultures" />
+        <action
+            android:id="@+id/action_cultureDetailFragment_to_culturesFragment"
+            app:destination="@id/culturesFragment" />
     </fragment>
 </navigation>
