@@ -26,11 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
 import java.util.Locale
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CulturesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class CulturesFragment : Fragment() {
     private lateinit var db : FirebaseFirestore
     private lateinit var  cultureRecyclerView : RecyclerView
@@ -96,7 +91,6 @@ class CulturesFragment : Fragment() {
             }
 
         })
-
 
         spinnerView.onItemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(

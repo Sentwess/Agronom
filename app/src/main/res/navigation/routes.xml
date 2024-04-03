@@ -36,7 +36,11 @@
         android:id="@+id/fieldsFragment"
         android:name="com.example.agronom.fragments.FieldsFragment"
         android:label="@string/fields_string"
-        tools:layout="@layout/fragment_fields" />
+        tools:layout="@layout/fragment_fields" >
+        <action
+            android:id="@+id/action_fieldsFragment_to_fieldsDetailFragment"
+            app:destination="@id/fieldsDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/harvestFragment"
         android:name="com.example.agronom.fragments.HarvestFragment"
@@ -100,5 +104,17 @@
         <action
             android:id="@+id/action_cultureDetailFragment_to_culturesFragment"
             app:destination="@id/culturesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fieldsDetailFragment"
+        android:name="com.example.agronom.fragments.FieldsDetailFragment"
+        android:label="fragment_fields_detail"
+        tools:layout="@layout/fragment_fields_detail" >
+        <action
+            android:id="@+id/action_fieldsDetailFragment_to_fieldsFragment"
+            app:destination="@id/fieldsFragment" />
+        <argument
+            android:name="currentField"
+            app:argType="com.example.agronom.data.Fields" />
     </fragment>
 </navigation>

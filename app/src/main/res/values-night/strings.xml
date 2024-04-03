@@ -12,4 +12,8 @@
         <item>По убыванию</item>
         <item>По возростанию</item>
     </string-array>
+    <string-array name="status">
+        <item>Свободно</item>
+        <item>Засеяно</item>
+    </string-array>
 </resources>

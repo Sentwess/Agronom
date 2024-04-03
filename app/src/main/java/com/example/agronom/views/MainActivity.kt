@@ -1,9 +1,9 @@
 package com.example.agronom.views
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.agronom.R
@@ -11,7 +11,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
-
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,13 +29,15 @@ class MainActivity : AppCompatActivity() {
         val bottomBar = findViewById<BottomNavigationView>(R.id.bottom_nav_view)
         bottomBar?.setupWithNavController(navController)
 
-        // скрываем нижнее навменю при авторизации
+        // скрываем нижнее навменю
         val bottomNavView:BottomNavigationView = findViewById(R.id.bottom_nav_view)
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.splashFragment -> bottomNavView.visibility = View.GONE
                 R.id.signInFragment -> bottomNavView.visibility = View.GONE
                 R.id.signUpFragment -> bottomNavView.visibility = View.GONE
+                R.id.cultureDetailFragment -> bottomNavView.visibility = View.GONE
+                R.id.fieldsDetailFragment -> bottomNavView.visibility = View.GONE
                 else -> bottomNavView.visibility = View.VISIBLE
             }
         }

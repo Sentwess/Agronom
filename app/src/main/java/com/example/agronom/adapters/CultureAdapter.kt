@@ -3,18 +3,12 @@ package com.example.agronom.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.cardview.widget.CardView
-import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agronom.R
 import com.example.agronom.data.Cultures
-import kotlin.io.encoding.Base64
 
 class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerView.Adapter<CultureAdapter.MyViewHolder>() {
 
@@ -28,7 +22,7 @@ class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerVi
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.culture, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.culture_item, parent, false)
         return MyViewHolder(itemView, mListener)
     }
 

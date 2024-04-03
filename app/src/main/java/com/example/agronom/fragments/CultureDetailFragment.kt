@@ -43,6 +43,7 @@ class CultureDetailFragment : Fragment() {
     private lateinit var tvGrowingSeason : EditText
     private lateinit var imageView : ImageView
     private lateinit var delImage : ImageButton
+    private lateinit var addImage : ImageButton
     private lateinit var editBtn : Button
     private lateinit var deleteBtn : Button
     private lateinit var saveBtn : Button
@@ -71,18 +72,18 @@ class CultureDetailFragment : Fragment() {
 
         tvName = view.findViewById(R.id.tvName)
         tvVarienty = view.findViewById(R.id.tvVarienty)
-        tvBoardingMonth = view.findViewById(R.id.tvboardingMonth)
-        tvGrowingSeason = view.findViewById(R.id.tvgrowingSeason)
+        tvBoardingMonth = view.findViewById(R.id.tvBoardingMonth)
+        tvGrowingSeason = view.findViewById(R.id.tvGrowingSeason)
 
         editBtn = view.findViewById(R.id.editBtn)
         deleteBtn = view.findViewById(R.id.deleteBtn)
         saveBtn = view.findViewById(R.id.saveBtn)
 
         imageView = view.findViewById(R.id.imageView)
+        addImage = view.findViewById(R.id.addImage)
         delImage = view.findViewById(R.id.delImage)
 
-        imageView.setOnClickListener { launchGallery() }
-        editBtn.setOnClickListener { showData(false) }
+        addImage.setOnClickListener { launchGallery() }
 
         delImage.setOnClickListener{
             if(filePath != null){
@@ -92,6 +93,8 @@ class CultureDetailFragment : Fragment() {
             culture.imagePath = "https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2Fimage%253A1000018888?alt=media&token=b6d1d9d9-37e9-4c52-8a4f-25ef2ab942a5"
             Glide.with(this).load(culture.imagePath).into(imageView)
         }
+
+        editBtn.setOnClickListener { showData(false) }
 
         deleteBtn.setOnClickListener{
             openDialog()
@@ -236,7 +239,7 @@ class CultureDetailFragment : Fragment() {
             tvVarienty.setInputType(InputType.TYPE_NULL)
             tvBoardingMonth.setInputType(InputType.TYPE_NULL)
             tvGrowingSeason.setInputType(InputType.TYPE_NULL)
-            imageView.isClickable = false
+            addImage.isClickable = false
             delImage.isClickable = false
             editBtn.text = "Редактировать"
             deleteBtn.isVisible = true
@@ -254,7 +257,7 @@ class CultureDetailFragment : Fragment() {
                 tvVarienty.setInputType(InputType.TYPE_CLASS_TEXT)
                 tvBoardingMonth.setInputType(InputType.TYPE_CLASS_TEXT)
                 tvGrowingSeason.setInputType(InputType.TYPE_CLASS_TEXT)
-                imageView.isClickable = true
+                addImage.isClickable = true
                 delImage.isClickable = true
                 editBtn.text = "Отменить"
                 saveBtn.isVisible = true
@@ -264,7 +267,7 @@ class CultureDetailFragment : Fragment() {
                 tvVarienty.setInputType(InputType.TYPE_NULL)
                 tvBoardingMonth.setInputType(InputType.TYPE_NULL)
                 tvGrowingSeason.setInputType(InputType.TYPE_NULL)
-                imageView.isClickable = false
+                addImage.isClickable = false
                 delImage.isClickable = false
                 editBtn.text = "Редактировать"
                 saveBtn.isVisible = false
