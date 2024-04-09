@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
 import com.example.agronom.adapters.CultureAdapter
 import com.example.agronom.data.Cultures
-import com.example.agronom.databinding.FragmentCulturesBinding
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,7 +31,6 @@ class CulturesFragment : Fragment() {
     private lateinit var  cultureRecyclerView : RecyclerView
     private lateinit var cultureAdapter : CultureAdapter
     private lateinit var  cultureArrayList : ArrayList<Cultures>
-    private lateinit var binding: FragmentCulturesBinding
     private lateinit var addBtn : ImageButton
 
     override fun onCreateView(
@@ -40,8 +38,7 @@ class CulturesFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentCulturesBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_cultures, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

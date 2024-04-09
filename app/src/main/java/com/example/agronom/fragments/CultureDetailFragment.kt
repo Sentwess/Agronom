@@ -25,7 +25,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.agronom.R
 import com.example.agronom.data.Cultures
-import com.example.agronom.databinding.FragmentCultureDetailBinding
 import com.google.android.gms.tasks.Task
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,7 +39,6 @@ import java.util.UUID
 class CultureDetailFragment : Fragment() {
     private val argsCulture : CultureDetailFragmentArgs by navArgs()
     private lateinit var db : FirebaseFirestore
-    private lateinit var binding: FragmentCultureDetailBinding
     private lateinit var tvName : EditText
     private lateinit var tvVarienty : EditText
     private lateinit var tvBoardingMonth : EditText
@@ -62,8 +60,7 @@ class CultureDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentCultureDetailBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_culture_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

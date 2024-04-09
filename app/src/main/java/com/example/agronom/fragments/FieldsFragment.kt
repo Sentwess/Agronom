@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
 import com.example.agronom.adapters.FieldsAdapter
 import com.example.agronom.data.Fields
-import com.example.agronom.databinding.FragmentFieldsBinding
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,7 +32,6 @@ class FieldsFragment : Fragment() {
     private lateinit var  fieldsRecyclerView : RecyclerView
     private lateinit var fieldsAdapter : FieldsAdapter
     private lateinit var  fieldsArrayList : ArrayList<Fields>
-    private lateinit var binding: FragmentFieldsBinding
     private lateinit var addBtn : ImageButton
 
     override fun onCreateView(
@@ -41,8 +39,7 @@ class FieldsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentFieldsBinding.inflate(inflater, container, false)
-        return binding.root
+        return inflater.inflate(R.layout.fragment_fields, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
