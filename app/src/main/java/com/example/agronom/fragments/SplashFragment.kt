@@ -3,10 +3,10 @@ package com.example.agronom.fragments
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.agronom.R
@@ -36,9 +36,9 @@ class SplashFragment : Fragment() {
         handler.postDelayed({
 
             if (isLogin)
-                navController.navigate(R.id.action_splashFragment_to_mainFragment)
+                navController.navigate(SplashFragmentDirections.actionSplashFragmentToMainFragment())
             else
-                navController.navigate(R.id.action_splashFragment_to_signInFragment)
+                navController.navigate(SplashFragmentDirections.actionSplashFragmentToSignInFragment())
 
         }, 2000)
     }

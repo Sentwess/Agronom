@@ -5,24 +5,30 @@
         android:id="@+id/culturesFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@android:drawable/btn_star"
+        android:icon="@drawable/cultures"
         android:title="@string/cultures_string" />
     <item
         android:id="@+id/fieldsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@android:drawable/ic_dialog_alert"
+        android:icon="@drawable/fields"
         android:title="@string/fields_string" />
+    <item
+        android:id="@+id/mainFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/main"
+        android:title="@string/main_string" />
     <item
         android:id="@+id/sowingsFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@android:drawable/stat_notify_voicemail"
+        android:icon="@drawable/sowings"
         android:title="@string/sowings_string" />
     <item
         android:id="@+id/harvestFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:icon="@android:drawable/ic_menu_delete"
+        android:icon="@drawable/harvest"
         android:title="@string/harvest_string" />
 </menu>

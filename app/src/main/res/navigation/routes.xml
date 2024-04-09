@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.agronom.fragments.MainFragment"
-        android:label="Агроном"
+        android:label="Главная"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_culturesFragment"
@@ -54,50 +54,53 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.agronom.fragments.SplashFragment"
-        android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" >
+        android:label="Заставка"
+        tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:launchSingleTop="true"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signUpFragment"
         android:name="com.example.agronom.fragments.SignUpFragment"
-        android:label="fragment_sign_up"
-        tools:layout="@layout/fragment_sign_up" >
+        android:label="Регистрация"
+        tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
         <action
             android:id="@+id/action_signUpFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:launchSingleTop="true"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
         android:name="com.example.agronom.fragments.SignInFragment"
-        android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        android:label="Авторизация"
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
             app:destination="@id/signUpFragment" />
         <action
             android:id="@+id/action_signInFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:launchSingleTop="true"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/cultureDetailFragment"
         android:name="com.example.agronom.fragments.CultureDetailFragment"
-        android:label="fragment_culture_detail"
-        tools:layout="@layout/fragment_culture_detail" >
+        android:label="Информация о культуре"
+        tools:layout="@layout/fragment_culture_detail">
         <argument
             android:name="currentCulture"
             app:argType="com.example.agronom.data.Cultures" />
@@ -108,8 +111,8 @@
     <fragment
         android:id="@+id/fieldsDetailFragment"
         android:name="com.example.agronom.fragments.FieldsDetailFragment"
-        android:label="fragment_fields_detail"
-        tools:layout="@layout/fragment_fields_detail" >
+        android:label="Поле"
+        tools:layout="@layout/fragment_fields_detail">
         <action
             android:id="@+id/action_fieldsDetailFragment_to_fieldsFragment"
             app:destination="@id/fieldsFragment" />

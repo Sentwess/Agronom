@@ -1,14 +1,13 @@
 package com.example.agronom.fragments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.agronom.R
 import com.example.agronom.databinding.FragmentSignUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
@@ -36,7 +35,7 @@ class SignUpFragment : Fragment() {
         init(view)
 
         binding.textViewSignIn.setOnClickListener {
-            navController.navigate(R.id.action_signUpFragment_to_signInFragment)
+            navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
         }
 
         binding.nextBtn.setOnClickListener {
@@ -61,7 +60,7 @@ class SignUpFragment : Fragment() {
     private fun registerUser(email: String, pass: String) {
         mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
             if (it.isSuccessful)
-                navController.navigate(R.id.action_signUpFragment_to_mainFragment)
+                navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToMainFragment())
             else
                 Toast.makeText(context, "Неверно указана почта или пароль", Toast.LENGTH_SHORT).show()
 

@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:ellipsize="marquee"
-    android:padding="16dp"
+    android:padding="14dp"
     android:textColor="#456c79"
-    android:textSize="18sp" />
+    android:textSize="20sp" />

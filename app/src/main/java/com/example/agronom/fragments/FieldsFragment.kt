@@ -3,13 +3,16 @@ package com.example.agronom.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.ImageButton
-import android.widget.SearchView
-import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,10 +34,7 @@ class FieldsFragment : Fragment() {
     private lateinit var fieldsAdapter : FieldsAdapter
     private lateinit var  fieldsArrayList : ArrayList<Fields>
     private lateinit var binding: FragmentFieldsBinding
-    private lateinit var searchView : SearchView
-    private lateinit var spinnerView : Spinner
     private lateinit var addBtn : ImageButton
-    private var isSpinnerInitial = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +48,6 @@ class FieldsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fieldsRecyclerView = view.findViewById(R.id.fieldsList)
-        searchView = view.findViewById(R.id.searchView)
-        spinnerView = view.findViewById(R.id.spinnerView)
         addBtn = view.findViewById(R.id.addBtn)
 
         fieldsRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -83,38 +81,35 @@ class FieldsFragment : Fragment() {
 
         })
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+        showMenuButtons()
+    }
+
+    private fun showMenuButtons(){
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.search_menu, menu)
+                val searchItem: MenuItem = menu.findItem(R.id.searchBar)
+                val searchView: SearchView = searchItem.actionView as SearchView
+
+                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        filteredList(newText)
+                        return true
+                    }
+
+                })
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                filteredList(newText)
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return true
             }
-
-        })
-
-
-        spinnerView.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if(isSpinnerInitial) {
-                    isSpinnerInitial = false;
-                    return;
-                }
-                filteredList(searchView.query.toString())
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
-        }
+        }, viewLifecycleOwner)
     }
 
     private fun getFieldsData() {
@@ -147,6 +142,7 @@ class FieldsFragment : Fragment() {
                 }
             }
 
+            /*
             if(spinnerView.selectedItemPosition == 0){
                 filteredList.sortBy { t -> t.docId }
             }
@@ -156,7 +152,7 @@ class FieldsFragment : Fragment() {
             if(spinnerView.selectedItemPosition == 2){
                 filteredList.sortBy { t -> t.name }
             }
-
+            */
 
             if(filteredList.isEmpty()){
                 filteredList.clear()

@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import com.example.agronom.R
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainFragment : Fragment() {
+
+    private lateinit var btnCultures : Button
+    private lateinit var btnFields : Button
+    private lateinit var btnSowings : Button
+    private lateinit var btnHarvest : Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -23,22 +24,30 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val fragmentLayout = inflater.inflate(R.layout.fragment_main, container, false)
-        val NavController = NavHostFragment.findNavController(this)
+        return inflater.inflate(R.layout.fragment_main, container, false)
+    }
 
-        fragmentLayout.findViewById<Button>(R.id.btnCultures).setOnClickListener{ NavController.navigate(
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        btnCultures = view.findViewById(R.id.btnCultures)
+        btnFields = view.findViewById(R.id.btnFields)
+        btnSowings = view.findViewById(R.id.btnSowings)
+        btnHarvest = view.findViewById(R.id.btnHarvest)
+
+        btnCultures.setOnClickListener{ findNavController().navigate(
             R.id.culturesFragment
         )}
-        fragmentLayout.findViewById<Button>(R.id.btnFields).setOnClickListener{ NavController.navigate(
+
+        btnFields.setOnClickListener{ findNavController().navigate(
             R.id.fieldsFragment
         )}
-        fragmentLayout.findViewById<Button>(R.id.btnSowings).setOnClickListener{ NavController.navigate(
+
+        btnSowings.setOnClickListener{ findNavController().navigate(
             R.id.sowingsFragment
         )}
-        fragmentLayout.findViewById<Button>(R.id.btnHarvest).setOnClickListener{ NavController.navigate(
+
+        btnHarvest.setOnClickListener{ findNavController().navigate(
             R.id.harvestFragment
         )}
-        // Inflate the layout for this fragment
-        return fragmentLayout
     }
 }

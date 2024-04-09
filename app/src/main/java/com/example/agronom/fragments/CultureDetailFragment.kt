@@ -5,16 +5,19 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.InputType
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -24,6 +27,7 @@ import com.example.agronom.R
 import com.example.agronom.data.Cultures
 import com.example.agronom.databinding.FragmentCultureDetailBinding
 import com.google.android.gms.tasks.Task
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -44,8 +48,6 @@ class CultureDetailFragment : Fragment() {
     private lateinit var imageView : ImageView
     private lateinit var delImage : ImageButton
     private lateinit var addImage : ImageButton
-    private lateinit var editBtn : Button
-    private lateinit var deleteBtn : Button
     private lateinit var saveBtn : Button
     private val PICK_IMAGE_REQUEST = 71
     private var filePath: Uri? = null
@@ -53,6 +55,7 @@ class CultureDetailFragment : Fragment() {
     private var storageReference: StorageReference? = null
     private var imageLast: String? = null
     lateinit var culture : Cultures
+    var newCulture : Boolean = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,8 +78,6 @@ class CultureDetailFragment : Fragment() {
         tvBoardingMonth = view.findViewById(R.id.tvBoardingMonth)
         tvGrowingSeason = view.findViewById(R.id.tvGrowingSeason)
 
-        editBtn = view.findViewById(R.id.editBtn)
-        deleteBtn = view.findViewById(R.id.deleteBtn)
         saveBtn = view.findViewById(R.id.saveBtn)
 
         imageView = view.findViewById(R.id.imageView)
@@ -94,12 +95,6 @@ class CultureDetailFragment : Fragment() {
             Glide.with(this).load(culture.imagePath).into(imageView)
         }
 
-        editBtn.setOnClickListener { showData(false) }
-
-        deleteBtn.setOnClickListener{
-            openDialog()
-        }
-
         saveBtn.setOnClickListener{
             if(filePath != null){
                 uploadImage()
@@ -109,17 +104,34 @@ class CultureDetailFragment : Fragment() {
             }
         }
 
-        if(culture.docId == null){
-            deleteBtn.isVisible = false
-            editBtn.isVisible = false
-            saveBtn.isVisible = true
-            Glide.with(this).load(culture.imagePath).into(imageView)
+        if(culture.docId != null){
+            saveBtn.isVisible = false
+            newCulture = false
+            changeInputType(false)
+            showMenuButtons()
         }
-        else{
-            deleteBtn.isVisible = true
-            editBtn.isVisible = true
-            showData(false)
-        }
+        loadData()
+    }
+
+    private fun showMenuButtons(){
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.edit_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                val id = menuItem.itemId
+                //handle item clicks
+                if (id == R.id.editBtn) {
+                    showData(false)
+                }
+                if (id == R.id.deleteBtn) {
+                    openDialog()
+                }
+                return true
+            }
+        }, viewLifecycleOwner)
     }
 
     private fun openDialog() {
@@ -136,6 +148,18 @@ class CultureDetailFragment : Fragment() {
             deleteData()
             customDialog.dismiss()
         }
+    }
+
+    private fun deleteData(){
+        db = FirebaseFirestore.getInstance()
+        db.collection("Cultures").document(culture.docId.toString()).delete()
+            .addOnSuccessListener {
+                Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
+            }
+        findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
     }
 
     private fun launchGallery() {
@@ -155,24 +179,11 @@ class CultureDetailFragment : Fragment() {
 
             filePath = data.data
             try {
-                val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, filePath)
-                imageView.setImageBitmap(bitmap)
+                Glide.with(this).load(filePath).into(imageView)
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
-    }
-
-    private fun deleteData(){
-        db = FirebaseFirestore.getInstance()
-        db.collection("Cultures").document(culture.docId.toString()).delete()
-            .addOnSuccessListener {
-                Toast.makeText(context, "Данные удалены", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
-            }
-        findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
     }
 
     private fun uploadImage(){
@@ -214,20 +225,47 @@ class CultureDetailFragment : Fragment() {
         if(culture.docId != null) {
             db.collection("Cultures").document(culture.docId.toString()).update(updates)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Данные обновлены", Toast.LENGTH_SHORT).show()
+
                 }
                 .addOnFailureListener {
-                    Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+
+                }
+
+
+            db.collection("Sowings")
+                .whereEqualTo("culture.docId", culture.docId)
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val docId = document.id
+                        val data = mapOf(
+                            "culture.cultureName" to culture.cultureName,
+                            "culture.varienty" to culture.varienty,
+                            "culture.imagePath" to uri
+                        )
+
+                        db.collection("Sowings").document(docId)
+                            .update(data)
+                            .addOnSuccessListener {
+
+                            }
+                            .addOnFailureListener { e ->
+
+                            }
+                    }
+                }
+                .addOnFailureListener { e ->
+
                 }
         }
         else{
             culture.docId = UUID.randomUUID().toString()
             db.collection("Cultures").document(culture.docId!!).set(updates)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Данные сохранены", Toast.LENGTH_SHORT).show()
+
                 }
                 .addOnFailureListener {
-                    Toast.makeText(context, "Ошибка", Toast.LENGTH_SHORT).show()
+
                 }
         }
         showData(true)
@@ -235,50 +273,62 @@ class CultureDetailFragment : Fragment() {
 
     private fun showData(save : Boolean){
         if(save){
+            loadData()
+            changeInputType(false)
+            buttonsClickable(false)
+            if(newCulture){
+                Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
+                findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
+            }
+            else{
+                Snackbar.make(requireView(), "Данные обновлены", Snackbar.LENGTH_SHORT).show()
+            }
+        }
+        else{
+            if(!saveBtn.isVisible) {
+                changeInputType(true)
+                buttonsClickable(true)
+            }
+            else{
+                culture.imagePath = imageLast
+                loadData()
+                changeInputType(false)
+                buttonsClickable(false)
+            }
+        }
+    }
+
+    private fun loadData(){
+        Glide.with(this).load(culture.imagePath).into(imageView)
+        tvName.setText(culture.cultureName)
+        tvVarienty.setText(culture.varienty)
+        tvBoardingMonth.setText(culture.boardingMonth)
+        tvGrowingSeason.setText(culture.growingSeason)
+    }
+    private fun changeInputType(type:Boolean){
+        if(type){
+            tvName.setInputType(InputType.TYPE_CLASS_TEXT)
+            tvVarienty.setInputType(InputType.TYPE_CLASS_TEXT)
+            tvBoardingMonth.setInputType(InputType.TYPE_CLASS_TEXT)
+            tvGrowingSeason.setInputType(InputType.TYPE_CLASS_TEXT)
+        }
+        else{
             tvName.setInputType(InputType.TYPE_NULL)
             tvVarienty.setInputType(InputType.TYPE_NULL)
             tvBoardingMonth.setInputType(InputType.TYPE_NULL)
             tvGrowingSeason.setInputType(InputType.TYPE_NULL)
-            addImage.isClickable = false
-            delImage.isClickable = false
-            editBtn.text = "Редактировать"
-            deleteBtn.isVisible = true
-            editBtn.isVisible = true
-            saveBtn.isVisible = false
-
-            tvName.setText(culture.cultureName)
-            tvVarienty.setText(culture.varienty)
-            tvBoardingMonth.setText(culture.boardingMonth)
-            tvGrowingSeason.setText(culture.growingSeason)
+        }
+    }
+    private fun buttonsClickable(type:Boolean){
+        if(type){
+            addImage.isClickable = true
+            delImage.isClickable = true
+            saveBtn.isVisible = true
         }
         else{
-            if(!saveBtn.isVisible) {
-                tvName.setInputType(InputType.TYPE_CLASS_TEXT)
-                tvVarienty.setInputType(InputType.TYPE_CLASS_TEXT)
-                tvBoardingMonth.setInputType(InputType.TYPE_CLASS_TEXT)
-                tvGrowingSeason.setInputType(InputType.TYPE_CLASS_TEXT)
-                addImage.isClickable = true
-                delImage.isClickable = true
-                editBtn.text = "Отменить"
-                saveBtn.isVisible = true
-            }
-            else{
-                tvName.setInputType(InputType.TYPE_NULL)
-                tvVarienty.setInputType(InputType.TYPE_NULL)
-                tvBoardingMonth.setInputType(InputType.TYPE_NULL)
-                tvGrowingSeason.setInputType(InputType.TYPE_NULL)
-                addImage.isClickable = false
-                delImage.isClickable = false
-                editBtn.text = "Редактировать"
-                saveBtn.isVisible = false
-
-                culture.imagePath = imageLast
-                Glide.with(this).load(culture.imagePath).into(imageView)
-                tvName.setText(culture.cultureName)
-                tvVarienty.setText(culture.varienty)
-                tvBoardingMonth.setText(culture.boardingMonth)
-                tvGrowingSeason.setText(culture.growingSeason)
-            }
+            addImage.isClickable = false
+            delImage.isClickable = false
+            saveBtn.isVisible = false
         }
     }
 }

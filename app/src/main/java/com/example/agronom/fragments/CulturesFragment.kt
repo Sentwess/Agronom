@@ -3,14 +3,15 @@ package com.example.agronom.fragments
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ImageButton
-import android.widget.SearchView
-import android.widget.Spinner
 import android.widget.Toast
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,16 +33,20 @@ class CulturesFragment : Fragment() {
     private lateinit var cultureAdapter : CultureAdapter
     private lateinit var  cultureArrayList : ArrayList<Cultures>
     private lateinit var binding: FragmentCulturesBinding
-    private lateinit var searchView : SearchView
-    private lateinit var spinnerView : Spinner
     private lateinit var addBtn : ImageButton
-    private var isSpinnerInitial = true
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding = FragmentCulturesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         cultureRecyclerView = view.findViewById(R.id.culturesList)
-        searchView = view.findViewById(R.id.searchView)
-        spinnerView = view.findViewById(R.id.spinnerView)
         addBtn = view.findViewById(R.id.addBtn)
 
         cultureRecyclerView.layoutManager = LinearLayoutManager(context)
@@ -80,18 +85,7 @@ class CulturesFragment : Fragment() {
 
         })
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                filteredList(newText)
-                return true
-            }
-
-        })
-
+        /*
         spinnerView.onItemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -111,6 +105,37 @@ class CulturesFragment : Fragment() {
             }
 
         }
+         */
+
+        showMenuButtons()
+    }
+
+    private fun showMenuButtons(){
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
+                menuInflater.inflate(R.menu.search_menu, menu)
+                val searchItem: MenuItem = menu.findItem(R.id.searchBar)
+                val searchView: androidx.appcompat.widget.SearchView = searchItem.actionView as androidx.appcompat.widget.SearchView
+
+                searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        return false
+                    }
+
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        filteredList(newText)
+                        return true
+                    }
+
+                })
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return true
+            }
+        }, viewLifecycleOwner)
     }
 
     private fun getCulturesData() {
@@ -132,15 +157,6 @@ class CulturesFragment : Fragment() {
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentCulturesBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     fun filteredList(query: String?){
         if(query != null){
             val filteredList = ArrayList<Cultures>()
@@ -154,6 +170,7 @@ class CulturesFragment : Fragment() {
                 }
             }
 
+            /*
             if(spinnerView.selectedItemPosition == 0){
                 filteredList.sortBy { t -> t.docId }
             }
@@ -163,6 +180,7 @@ class CulturesFragment : Fragment() {
             if(spinnerView.selectedItemPosition == 2){
                 filteredList.sortBy { t -> t.cultureName }
             }
+            */
 
 
             if(filteredList.isEmpty()){
