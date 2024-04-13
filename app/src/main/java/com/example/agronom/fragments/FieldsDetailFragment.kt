@@ -35,7 +35,7 @@ class FieldsDetailFragment : Fragment() {
     private lateinit var saveBtn : Button
     lateinit var fieldData : Fields
     var newField : Boolean = true
-
+    var isEditMode = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,6 +76,7 @@ class FieldsDetailFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
                 menuInflater.inflate(R.menu.edit_menu, menu)
             }
 
@@ -83,7 +84,13 @@ class FieldsDetailFragment : Fragment() {
                 val id = menuItem.itemId
                 //handle item clicks
                 if (id == R.id.editBtn) {
+                    if (isEditMode) {
+                        menuItem.setIcon(R.drawable.edit_icon)
+                    } else {
+                        menuItem.setIcon(R.drawable.cancel_ic)
+                    }
                     showData(false)
+                    isEditMode = !isEditMode
                 }
                 if (id == R.id.deleteBtn) {
                     openDialog()
@@ -227,6 +234,7 @@ class FieldsDetailFragment : Fragment() {
             svStatus.setSelection(0)
         }
     }
+
     private fun changeInputType(type:Boolean){
         if(type){
             tvName.setInputType(InputType.TYPE_CLASS_TEXT)

@@ -14,11 +14,11 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
 import com.example.agronom.adapters.SowingsAdapter
-import com.example.agronom.data.Fields
 import com.example.agronom.data.Sowings
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
@@ -58,27 +58,28 @@ class SowingsFragment : Fragment() {
         getSowingsData()
 
         addBtn.setOnClickListener{
-            val field = Fields(null,
+            val sowing = Sowings(null,
                 null,
                 null,
-                false)
-           // val action = FieldsFragmentDirections.actionFieldsFragmentToFieldsDetailFragment(field)
-           // findNavController().navigate(action)
+                null,
+                null,
+                null)
+            val action = SowingsFragmentDirections.actionSowingsFragmentToSowingsDetailFragment(sowing)
+            findNavController().navigate(action)
         }
 
         sowingsAdapter.setOnItemClickListener(object : SowingsAdapter.OnItemClickListener{
             override fun onItemClick(position: Int) {
                 val item = sowingsArrayList[position]
-                val field = Sowings(item.docId.toString(),
+                val sowing = Sowings(item.docId,
                     item.culture,
                     item.field,
                     item.count,
                     item.date,
                     item.status)
-                //val action = FieldsFragmentDirections.actionFieldsFragmentToFieldsDetailFragment(field)
-                //findNavController().navigate(action)
+                val action = SowingsFragmentDirections.actionSowingsFragmentToSowingsDetailFragment(sowing)
+                findNavController().navigate(action)
             }
-
         })
 
         showMenuButtons()

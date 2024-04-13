@@ -6,6 +6,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:icon="@drawable/edit_icon"
+        android:background="?android:attr/selectableItemBackground"
         app:showAsAction="always"
         android:title="Редактировать" />
 
@@ -14,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/delete_icon"
+        android:background="?android:attr/selectableItemBackground"
         app:showAsAction="always"
         android:title="Удалить" />
 </menu>

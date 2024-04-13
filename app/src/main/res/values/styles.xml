@@ -23,4 +23,9 @@
         <item name="queryHint">Поиск</item>
     </style>
 
+    <style name="ButtonStyle" parent="android:Widget.Button">
+        <item name="android:background">@color/focused</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>

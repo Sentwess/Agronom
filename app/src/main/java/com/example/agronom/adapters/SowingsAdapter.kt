@@ -39,8 +39,8 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
         holder.culture.text = currentItem.culture?.get("cultureName") + "(${currentItem.culture?.get("varienty")})"
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
-        holder.count.text = currentItem.count.toString()
-        holder.date.text = currentItem.date.toString()
+        holder.count.text = currentItem.count.toString() + " т."
+        holder.date.text = currentItem.date
         if(currentItem.status!!){
             holder.status.text = "Засеяно"
         }

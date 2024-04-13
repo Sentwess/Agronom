@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     bottomNavView.visibility = View.GONE
                     toolBar.visibility = View.GONE
                 }
-                R.id.cultureDetailFragment, R.id.fieldsDetailFragment -> {
+                R.id.cultureDetailFragment, R.id.fieldsDetailFragment, R.id.sowingsDetailFragment -> {
                     bottomNavView.visibility = View.GONE
                     toolBar.visibility = View.VISIBLE
                 }

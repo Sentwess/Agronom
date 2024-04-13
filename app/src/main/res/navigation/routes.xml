@@ -30,7 +30,11 @@
         tools:layout="@layout/fragment_cultures" >
         <action
             android:id="@+id/action_culturesFragment_to_cultureDetailFragment"
-            app:destination="@id/cultureDetailFragment" />
+            app:destination="@id/cultureDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/fieldsFragment"
@@ -39,7 +43,11 @@
         tools:layout="@layout/fragment_fields" >
         <action
             android:id="@+id/action_fieldsFragment_to_fieldsDetailFragment"
-            app:destination="@id/fieldsDetailFragment" />
+            app:destination="@id/fieldsDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
     </fragment>
     <fragment
         android:id="@+id/harvestFragment"
@@ -50,7 +58,15 @@
         android:id="@+id/sowingsFragment"
         android:name="com.example.agronom.fragments.SowingsFragment"
         android:label="@string/sowings_string"
-        tools:layout="@layout/fragment_sowings" />
+        tools:layout="@layout/fragment_sowings" >
+        <action
+            android:id="@+id/action_sowingsFragment_to_sowingsDetailFragment"
+            app:destination="@id/sowingsDetailFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.example.agronom.fragments.SplashFragment"
@@ -58,11 +74,19 @@
         tools:layout="@layout/fragment_splash">
         <action
             android:id="@+id/action_splashFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_splashFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
@@ -73,11 +97,19 @@
         tools:layout="@layout/fragment_sign_up">
         <action
             android:id="@+id/action_signUpFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
         <action
             android:id="@+id/action_signUpFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
@@ -88,25 +120,37 @@
         tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_signUpFragment"
-            app:destination="@id/signUpFragment" />
+            app:destination="@id/signUpFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right" />
         <action
             android:id="@+id/action_signInFragment_to_mainFragment"
             app:destination="@id/mainFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
+            app:popEnterAnim="@anim/from_left"
+            app:popExitAnim="@anim/to_right"
             app:popUpTo="@id/routes"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/cultureDetailFragment"
         android:name="com.example.agronom.fragments.CultureDetailFragment"
-        android:label="Информация о культуре"
+        android:label="Культура"
         tools:layout="@layout/fragment_culture_detail">
         <argument
             android:name="currentCulture"
             app:argType="com.example.agronom.data.Cultures" />
         <action
             android:id="@+id/action_cultureDetailFragment_to_culturesFragment"
-            app:destination="@id/culturesFragment" />
+            app:destination="@id/culturesFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
     </fragment>
     <fragment
         android:id="@+id/fieldsDetailFragment"
@@ -115,9 +159,29 @@
         tools:layout="@layout/fragment_fields_detail">
         <action
             android:id="@+id/action_fieldsDetailFragment_to_fieldsFragment"
-            app:destination="@id/fieldsFragment" />
+            app:destination="@id/fieldsFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
         <argument
             android:name="currentField"
             app:argType="com.example.agronom.data.Fields" />
+    </fragment>
+    <fragment
+        android:id="@+id/sowingsDetailFragment"
+        android:name="com.example.agronom.fragments.SowingsDetailFragment"
+        android:label="Посев"
+        tools:layout="@layout/fragment_sowings_detail">
+        <action
+            android:id="@+id/action_sowingsDetailFragment_to_sowingsFragment"
+            app:destination="@id/sowingsFragment"
+            app:enterAnim="@anim/from_left"
+            app:exitAnim="@anim/to_right"
+            app:popEnterAnim="@anim/from_right"
+            app:popExitAnim="@anim/to_left" />
+        <argument
+            android:name="currentSowing"
+            app:argType="com.example.agronom.data.Sowings" />
     </fragment>
 </navigation>

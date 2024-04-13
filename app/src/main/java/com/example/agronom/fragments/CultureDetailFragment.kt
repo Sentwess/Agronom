@@ -54,6 +54,7 @@ class CultureDetailFragment : Fragment() {
     private var imageLast: String? = null
     lateinit var culture : Cultures
     var newCulture : Boolean = true
+    var isEditMode = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,6 +115,7 @@ class CultureDetailFragment : Fragment() {
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menu.clear()
                 menuInflater.inflate(R.menu.edit_menu, menu)
             }
 
@@ -121,7 +123,13 @@ class CultureDetailFragment : Fragment() {
                 val id = menuItem.itemId
                 //handle item clicks
                 if (id == R.id.editBtn) {
+                    if (isEditMode) {
+                        menuItem.setIcon(R.drawable.edit_icon)
+                    } else {
+                        menuItem.setIcon(R.drawable.cancel_ic)
+                    }
                     showData(false)
+                    isEditMode = !isEditMode
                 }
                 if (id == R.id.deleteBtn) {
                     openDialog()
