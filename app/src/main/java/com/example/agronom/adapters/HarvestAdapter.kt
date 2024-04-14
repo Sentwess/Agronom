@@ -8,60 +8,40 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.agronom.R
-import com.example.agronom.data.Sowings
+import com.example.agronom.data.Harvest
 
-class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerView.Adapter<SowingsAdapter.MyViewHolder>() {
-    private lateinit var mListener:OnItemClickListener
-
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
-    }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
-    }
+class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerView.Adapter<HarvestAdapter.MyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.sowing_item, parent, false)
-        return MyViewHolder(itemView, mListener)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.harvest_item, parent, false)
+        return MyViewHolder(itemView)
     }
 
-    fun setFilteredList(sowingsList: ArrayList<Sowings>){
-        this.sowingsList = sowingsList
+    fun setFilteredList(harvestList: ArrayList<Harvest>){
+        this.harvestList = harvestList
         notifyDataSetChanged()
     }
 
     override fun getItemCount(): Int {
-        return  sowingsList.size
+        return  harvestList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentItem = sowingsList[position]
+        val currentItem = harvestList[position]
         holder.culture.text = currentItem.culture?.get("cultureName") + "(${currentItem.culture?.get("varienty")})"
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
         holder.count.text = currentItem.count.toString() + " т."
         holder.date.text = currentItem.date
-        if(currentItem.status!!){
-            holder.status.text = "Засеян"
-        }
-        else{
-            holder.status.text = "Завершён"
-        }
     }
 
-    class MyViewHolder(itemView : View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val culture : TextView = itemView.findViewById(R.id.tvCulture)
         val field : TextView = itemView.findViewById(R.id.tvField)
         val count : TextView = itemView.findViewById(R.id.tvCount)
         val date : TextView = itemView.findViewById(R.id.tvDate)
-        val status : TextView = itemView.findViewById(R.id.tvStatus)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
 
-        init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.view.MenuHost
@@ -43,16 +44,20 @@ class SowingsDetailFragment : Fragment() {
     private lateinit var svVarienty : Spinner
     private lateinit var svStatus : Spinner
     private lateinit var tvCount : EditText
+    private lateinit var tvCountHarvest : EditText
     private lateinit var tvDateStart : TextView
-    private lateinit var tvDateEnd : EditText
+    private lateinit var tvDateEnd : TextView
     private lateinit var saveBtn : Button
+    private lateinit var harvestLayout : LinearLayout
     private lateinit var pickDateStartBtn : ImageButton
+    private lateinit var pickDateEndBtn : ImageButton
     data class FieldItem(val fieldName: String, val size: String, val docId: String)
     data class CultureItem(val cultureName: String, val varienty: String, val boardingMonth: String, val growingSeason: String, val imagePath: String, val docId: String)
     var cultureNameItems = ArrayList<CultureItem>()
     var varientyItems = ArrayList<CultureItem>()
     val fieldItems = ArrayList<FieldItem>()
     var isEditMode = false
+    var isHarvestMode = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,16 +85,23 @@ class SowingsDetailFragment : Fragment() {
     }
 
     private fun initializeViews(view: View) {
+        harvestLayout = view.findViewById(R.id.harvestLayout)
         pickDateStartBtn = view.findViewById(R.id.pickDateStartBtn)
+        pickDateEndBtn = view.findViewById(R.id.pickDateEndBtn)
         pickDateStartBtn.setOnClickListener {
-            showDatePickerDialog()
+            showDatePickerDialog(true)
+        }
+        pickDateEndBtn.setOnClickListener {
+            showDatePickerDialog(false)
         }
 
         svField = view.findViewById(R.id.svField)
         svCulture = view.findViewById(R.id.svCulture)
         svVarienty = view.findViewById(R.id.svVarienty)
         tvCount = view.findViewById(R.id.tvCount)
+        tvCountHarvest = view.findViewById(R.id.tvCountHarvest)
         tvDateStart = view.findViewById(R.id.tvDateStart)
+        tvDateEnd = view.findViewById(R.id.tvDateEnd)
         tvDateEnd = view.findViewById(R.id.tvDateEnd)
         svStatus = view.findViewById(R.id.svStatus)
         val statusAdapter = ArrayAdapter(view.context, R.layout.spinner_item, resources.getStringArray(R.array.sowingStatus))
@@ -106,7 +118,7 @@ class SowingsDetailFragment : Fragment() {
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.edit_menu, menu)
+                menuInflater.inflate(R.menu.editsowing_menu, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -120,6 +132,15 @@ class SowingsDetailFragment : Fragment() {
                     }
                     showData(false)
                     isEditMode = !isEditMode
+                }
+                if (id == R.id.harvestBtn) {
+                    if (isHarvestMode) {
+                        menuItem.setIcon(R.drawable.harvest_icon)
+                    } else {
+                        menuItem.setIcon(R.drawable.back_icon)
+                    }
+                    isHarvestMode = !isHarvestMode
+                    showHarvest()
                 }
                 if (id == R.id.deleteBtn) {
                     deleteDialog()
@@ -154,7 +175,7 @@ class SowingsDetailFragment : Fragment() {
                 Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
             }
     }
-    private fun showDatePickerDialog(){
+    private fun showDatePickerDialog(startDate:Boolean){
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -162,7 +183,12 @@ class SowingsDetailFragment : Fragment() {
 
         DatePickerDialog(requireView().context,
             { _, selectedYear, selectedMonth, dayOfMonth ->
-                tvDateStart.text = "${dayOfMonth}.${selectedMonth + 1}.$selectedYear"
+                if(startDate) {
+                    tvDateStart.text = "${dayOfMonth}.${selectedMonth + 1}.$selectedYear"
+                }
+                else{
+                    tvDateEnd.text = "${dayOfMonth}.${selectedMonth + 1}.$selectedYear"
+                }
             }, year, month, day
         ).show()
     }
@@ -279,6 +305,27 @@ class SowingsDetailFragment : Fragment() {
                 .addOnFailureListener {
 
                 }
+
+            if(isHarvestMode){
+                val harvest = mapOf(
+                    "culture" to sowingData.culture,
+                    "field" to sowingData.field,
+                    "sowing" to mapOf(
+                        "docId" to sowingData.docId,
+                        "count" to sowingData.count,
+                        "date" to sowingData.date
+                    ),
+                    "count" to tvCountHarvest.text.toString().toDouble(),
+                    "date" to tvDateEnd.text.toString()
+                )
+                db.collection("Harvests").document(UUID.randomUUID().toString()).set(harvest)
+                    .addOnSuccessListener {
+
+                    }
+                    .addOnFailureListener {
+
+                    }
+            }
         }
         else{
             sowingData.docId = UUID.randomUUID().toString()
@@ -298,6 +345,10 @@ class SowingsDetailFragment : Fragment() {
             loadData()
             changeInputType(false)
             saveBtn.isVisible = false
+            if(isHarvestMode){
+                isHarvestMode = !isHarvestMode
+                showHarvest()
+            }
             if(newSowing){
                 Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(SowingsDetailFragmentDirections.actionSowingsDetailFragmentToSowingsFragment())
@@ -334,6 +385,7 @@ class SowingsDetailFragment : Fragment() {
             svStatus.setOnTouchListener { v, event ->
                 false
             }
+            pickDateStartBtn.isClickable = true
         }
         else{
             tvCount.setInputType(InputType.TYPE_NULL)
@@ -349,6 +401,18 @@ class SowingsDetailFragment : Fragment() {
             svStatus.setOnTouchListener { v, event ->
                 true
             }
+            pickDateStartBtn.isClickable = false
+        }
+    }
+
+    private fun showHarvest(){
+        if(isHarvestMode){
+            harvestLayout.isVisible = true
+            saveBtn.isVisible = true
+        }
+        else{
+            harvestLayout.isVisible = false
+            saveBtn.isVisible = false
         }
     }
 }

@@ -59,10 +59,9 @@
         android:id="@id/container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
         android:layout_marginTop="-20dp"
-        app:strokeColor="@color/black"
         app:cardCornerRadius="25dp"
+        app:strokeColor="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -71,7 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="20dp"
-            android:background="#f2fed1"
             android:orientation="vertical">
 
             <LinearLayout
@@ -156,8 +154,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-
 
             <View
                 android:layout_width="match_parent"
@@ -265,7 +261,7 @@
                             android:textColor="@color/blue"
                             android:textSize="18sp"
                             android:padding="14dp"
-                            android:hint="Ликамеро"
+                            android:hint="80 - 90 дней"
                             android:maxLines="1"/>
 
                     </com.google.android.material.card.MaterialCardView>
