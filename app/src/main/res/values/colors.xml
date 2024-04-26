@@ -2,8 +2,12 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="focused">#abf600</color>
     <color name="tool">#2AAE39</color>
-    <color name="blue">#456c79</color>
-    <color name="gray">#a8a3aa</color>
+    <color name="focused">#1fcc79</color>
+    <color name="light_green">#E3FFF1</color>
+    <color name="yellow">#ffcc00</color>
+    <color name="red">#ff5842</color>
+    <color name="blue">#3E5481</color>
+    <color name="mText">#2E3E5C</color>
+    <color name="gray">#9FA5C0</color>
 </resources>

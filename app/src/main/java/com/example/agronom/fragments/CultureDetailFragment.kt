@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -45,7 +46,6 @@ class CultureDetailFragment : Fragment() {
     private lateinit var tvGrowingSeason : EditText
     private lateinit var imageView : ImageView
     private lateinit var delImage : ImageButton
-    private lateinit var addImage : ImageButton
     private lateinit var saveBtn : Button
     private val PICK_IMAGE_REQUEST = 71
     private var filePath: Uri? = null
@@ -78,37 +78,38 @@ class CultureDetailFragment : Fragment() {
 
         saveBtn = view.findViewById(R.id.saveBtn)
 
+        if(culture.docId == null) {
+            saveBtn.setOnClickListener {
+                if (filePath != null) {
+                    uploadImage()
+                } else {
+                    updateData(culture.imagePath!!)
+                }
+            }
+        }
+
         imageView = view.findViewById(R.id.imageView)
-        addImage = view.findViewById(R.id.addImage)
         delImage = view.findViewById(R.id.delImage)
 
-        addImage.setOnClickListener { launchGallery() }
+        imageView.setOnClickListener { launchGallery() }
 
         delImage.setOnClickListener{
             if(filePath != null){
                 filePath = null
             }
             imageLast = culture.imagePath
-            culture.imagePath = "https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2Fimage%253A1000018888?alt=media&token=b6d1d9d9-37e9-4c52-8a4f-25ef2ab942a5"
+            culture.imagePath = "https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2FCover.png?alt=media&token=073bfc13-a9fb-4f43-8479-2bec4079d4d7"
             Glide.with(this).load(culture.imagePath).into(imageView)
-        }
-
-        saveBtn.setOnClickListener{
-            if(filePath != null){
-                uploadImage()
-            }
-            else{
-                updateData(culture.imagePath!!)
-            }
         }
 
         if(culture.docId != null){
             saveBtn.isVisible = false
             newCulture = false
             changeInputType(false)
+            buttonsClickable(false)
             showMenuButtons()
+            loadData()
         }
-        loadData()
     }
 
     private fun showMenuButtons(){
@@ -117,6 +118,22 @@ class CultureDetailFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.edit_menu, menu)
+                val myMenuItem = menu.findItem(R.id.editBtn)
+                saveBtn.setOnClickListener {
+                    if(filePath != null){
+                        uploadImage()
+                    }
+                    else{
+                        updateData(culture.imagePath!!)
+                    }
+
+                    if(isEditMode){
+                        myMenuItem?.setIcon(R.drawable.cancel_ic)
+                    }
+                    else{
+                        myMenuItem?.setIcon(R.drawable.edit_icon)
+                    }
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -144,6 +161,7 @@ class CultureDetailFragment : Fragment() {
         val customDialog = AlertDialog.Builder(view?.context)
             .setView(dialogView)
             .show()
+        customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
         val btDismiss = dialogView.findViewById<Button>(R.id.btDismissCustomDialog)
         val btPositive = dialogView.findViewById<Button>(R.id.btPositiveCustomDialog)
         btDismiss.setOnClickListener {
@@ -192,6 +210,7 @@ class CultureDetailFragment : Fragment() {
     }
 
     private fun uploadImage(){
+        println("uploadImage")
         val fileName = File(filePath.toString()).name
         val ref = storageReference?.child("images/$fileName")
             val uploadTask = ref?.putFile(filePath!!)
@@ -214,7 +233,23 @@ class CultureDetailFragment : Fragment() {
             }
     }
 
+    private fun createDialog(messages: MutableList<String>) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_message, null)
+        val customDialog = AlertDialog.Builder(view?.context)
+            .setView(dialogView)
+            .show()
+        customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
+        val textView = dialogView.findViewById<TextView>(R.id.tvMessage)
+        val listAsString = messages.joinToString("\n")
+        textView.text = listAsString
+        val okBtn = dialogView.findViewById<Button>(R.id.okBtn)
+        okBtn.setOnClickListener {
+            customDialog.dismiss()
+        }
+    }
+
     private fun updateData(uri : String){
+        println("updateData")
         culture.cultureName = tvName.text.toString()
         culture.varienty = tvVarienty.text.toString()
         culture.boardingMonth = tvBoardingMonth.text.toString()
@@ -227,53 +262,67 @@ class CultureDetailFragment : Fragment() {
             "growingSeason" to culture.growingSeason,
             "imagePath" to uri
         )
-        if(culture.docId != null) {
-            db.collection("Cultures").document(culture.docId.toString()).update(updates)
-                .addOnSuccessListener {
+        val errors = mutableListOf<String>()
+        if(tvName.text.isNullOrBlank() || tvName.text.isNullOrEmpty()){
+            errors.add("- Название культуры")
+        }
+        if(tvVarienty.text.isNullOrBlank() || tvVarienty.text.isNullOrEmpty()){
+            errors.add("- Сорт культуры")
+        }
+        if(tvBoardingMonth.text.isNullOrBlank() || tvBoardingMonth.text.isNullOrEmpty()){
+            errors.add("- Период высаживания")
+        }
+        if(errors.size > 0){
+            createDialog(errors)
+        }
+        else {
+            if (culture.docId != null) {
+                db.collection("Cultures").document(culture.docId.toString()).update(updates)
+                    .addOnSuccessListener {
 
-                }
-                .addOnFailureListener {
-
-                }
-
-
-            db.collection("Sowings")
-                .whereEqualTo("culture.docId", culture.docId)
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val docId = document.id
-                        val data = mapOf(
-                            "culture.cultureName" to culture.cultureName,
-                            "culture.varienty" to culture.varienty,
-                            "culture.imagePath" to uri
-                        )
-
-                        db.collection("Sowings").document(docId)
-                            .update(data)
-                            .addOnSuccessListener {
-
-                            }
-                            .addOnFailureListener { e ->
-
-                            }
                     }
-                }
-                .addOnFailureListener { e ->
+                    .addOnFailureListener {
 
-                }
+                    }
+
+
+                db.collection("Sowings")
+                    .whereEqualTo("culture.docId", culture.docId)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            val docId = document.id
+                            val data = mapOf(
+                                "culture.cultureName" to culture.cultureName,
+                                "culture.varienty" to culture.varienty,
+                                "culture.imagePath" to uri
+                            )
+
+                            db.collection("Sowings").document(docId)
+                                .update(data)
+                                .addOnSuccessListener {
+
+                                }
+                                .addOnFailureListener { e ->
+
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+
+                    }
+            } else {
+                culture.docId = UUID.randomUUID().toString()
+                db.collection("Cultures").document(culture.docId!!).set(updates)
+                    .addOnSuccessListener {
+
+                    }
+                    .addOnFailureListener {
+
+                    }
+            }
+            showData(true)
         }
-        else{
-            culture.docId = UUID.randomUUID().toString()
-            db.collection("Cultures").document(culture.docId!!).set(updates)
-                .addOnSuccessListener {
-
-                }
-                .addOnFailureListener {
-
-                }
-        }
-        showData(true)
     }
 
     private fun showData(save : Boolean){
@@ -281,6 +330,9 @@ class CultureDetailFragment : Fragment() {
             loadData()
             changeInputType(false)
             buttonsClickable(false)
+            if(isEditMode){
+                isEditMode = false
+            }
             if(newCulture){
                 Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
@@ -326,12 +378,12 @@ class CultureDetailFragment : Fragment() {
     }
     private fun buttonsClickable(type:Boolean){
         if(type){
-            addImage.isClickable = true
+            imageView.isClickable = true
             delImage.isClickable = true
             saveBtn.isVisible = true
         }
         else{
-            addImage.isClickable = false
+            imageView.isClickable = false
             delImage.isClickable = false
             saveBtn.isVisible = false
         }

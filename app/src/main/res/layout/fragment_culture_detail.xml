@@ -8,199 +8,168 @@
     android:background="@android:color/transparent"
     tools:context=".fragments.CultureDetailFragment">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="-20dp"
-        app:layout_constraintBottom_toTopOf="@+id/container"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/ic_launcher_background"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="40dp"
-            android:translationZ="1dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageButton
-                android:id="@+id/addImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="10dp"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:src="@drawable/upload"/>
-
-            <ImageButton
-                android:id="@+id/delImage"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:scaleType="fitXY"
-                android:background="@android:color/transparent"
-                android:src="@drawable/delete_icon"/>
-
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@id/container"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="-20dp"
-        app:cardCornerRadius="25dp"
-        app:strokeColor="@android:color/transparent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                app:strokeColor="@android:color/transparent">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/view_line_dotted"
+                    android:layerType="software">
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="200dp"
+                        android:layout_height="200dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/cover" />
+
+                        <ImageButton
+                            android:id="@+id/delImage"
+                            android:layout_alignEnd="@id/imageView"
+                            android:layout_margin="5dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@android:color/transparent"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/cancel_icon" />
+
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingRight="10dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Название"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:textColor="@color/gray"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Название"
-                        android:textSize="18sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TextInputLayoutN"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="50dp"
+                    app:boxCornerRadiusBottomStart="50dp"
+                    app:boxCornerRadiusTopEnd="50dp"
+                    app:boxCornerRadiusTopStart="50dp"
+                    app:hintEnabled="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/outlinedTextFieldN"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                        android:textColor="@color/mText"
+                        android:hint="Пшеница"
+                        android:theme="@style/EditTextStyle"/>
 
-                        <EditText
-                            android:id="@+id/tvName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:padding="14dp"
-                            android:hint="Пшеница"
-                            android:maxLines="1"/>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingLeft="10dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:textColor="@color/gray"
-                        android:fontFamily="@font/poppins_medium"
-                        android:text="Сорт"
-                        android:textSize="18sp" />
-
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/outlinedTextFieldB"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                        <EditText
-                            android:id="@+id/tvVarienty"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:padding="14dp"
-                            android:hint="Ликамеро"
-                            android:maxLines="1"/>
-
-                    </com.google.android.material.card.MaterialCardView>
-
-                </LinearLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/gray"
-                />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Сорт"
+                    android:textColor="@color/blue"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TextInputLayoutV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxCornerRadiusBottomEnd="50dp"
+                    app:boxCornerRadiusBottomStart="50dp"
+                    app:boxCornerRadiusTopEnd="50dp"
+                    app:boxCornerRadiusTopStart="50dp"
+                    app:hintEnabled="false"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/tvVarienty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/mText"
+                        android:hint="Ликамеро"
+                        android:theme="@style/EditTextStyle"/>
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingRight="10dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="bottom"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingRight="5dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:textColor="@color/gray"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Период высаживания"
-                        android:textSize="18sp" />
+                        android:textColor="@color/blue"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingLeft="10dp"
-                    android:gravity="bottom"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:textColor="@color/gray"
-                        android:fontFamily="@font/poppins_medium"
+                        android:fontFamily="@font/poppins_semibold"
                         android:text="Срок созревания"
-                        android:textSize="18sp" />
+                        android:textColor="@color/blue"
+                        android:textSize="20sp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -212,82 +181,78 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingRight="10dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingRight="5dp">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/outlinedTextFieldZ"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TextInputLayoutBM"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
+                        app:boxCornerRadiusBottomEnd="50dp"
+                        app:boxCornerRadiusBottomStart="50dp"
+                        app:boxCornerRadiusTopEnd="50dp"
+                        app:boxCornerRadiusTopStart="50dp"
+                        app:hintEnabled="false"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/tvBoardingMonth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:padding="14dp"
+                            android:textColor="@color/mText"
                             android:hint="Раний"
-                            android:maxLines="1"/>
+                            android:theme="@style/EditTextStyle"/>
 
-                    </com.google.android.material.card.MaterialCardView>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:paddingLeft="10dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:id="@+id/outlinedTextFieldC"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TextInputLayoutGS"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
+                        app:boxCornerRadiusBottomEnd="50dp"
+                        app:boxCornerRadiusBottomStart="50dp"
+                        app:boxCornerRadiusTopEnd="50dp"
+                        app:boxCornerRadiusTopStart="50dp"
+                        app:hintEnabled="false"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                        <EditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/tvGrowingSeason"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/poppins_medium"
-                            android:textColor="@color/blue"
-                            android:textSize="18sp"
-                            android:padding="14dp"
+                            android:textColor="@color/mText"
                             android:hint="80 - 90 дней"
-                            android:maxLines="1"/>
+                            android:theme="@style/EditTextStyle"/>
 
-                    </com.google.android.material.card.MaterialCardView>
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginVertical="20dp"
-                android:background="@color/gray"
-                />
-
             <Button
                 android:id="@+id/saveBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_medium"
-                android:textSize="16sp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/focused"
+                android:fontFamily="@font/poppins_semibold"
                 android:text="Сохранить"
-                />
+                android:textSize="18sp" />
 
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

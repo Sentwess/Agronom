@@ -3,6 +3,7 @@ package com.example.agronom.fragments
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.InputType
 import android.view.LayoutInflater
@@ -11,15 +12,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -29,6 +28,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.agronom.R
 import com.example.agronom.data.Sowings
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.UUID
@@ -39,18 +39,22 @@ class SowingsDetailFragment : Fragment() {
     private val argsSowing : SowingsDetailFragmentArgs by navArgs()
     lateinit var sowingData : Sowings
     var newSowing : Boolean = true
-    private lateinit var svField : Spinner
-    private lateinit var svCulture : Spinner
-    private lateinit var svVarienty : Spinner
-    private lateinit var svStatus : Spinner
+    private lateinit var fieldLayout : TextInputLayout
+    private lateinit var cultureLayout : TextInputLayout
+    private lateinit var varientyLayout : TextInputLayout
+    private lateinit var svField : AutoCompleteTextView
+    private lateinit var svCulture : AutoCompleteTextView
+    private lateinit var svVarienty : AutoCompleteTextView
     private lateinit var tvCount : EditText
     private lateinit var tvCountHarvest : EditText
-    private lateinit var tvDateStart : TextView
-    private lateinit var tvDateEnd : TextView
+    private lateinit var tvDateStart : EditText
+    private lateinit var tvDateEnd : EditText
+    private lateinit var cancelBtn : Button
+    private lateinit var harvestBtn : Button
     private lateinit var saveBtn : Button
     private lateinit var harvestLayout : LinearLayout
-    private lateinit var pickDateStartBtn : ImageButton
-    private lateinit var pickDateEndBtn : ImageButton
+    private lateinit var startDateLayout : TextInputLayout
+    private lateinit var endDateLayout : TextInputLayout
     data class FieldItem(val fieldName: String, val size: String, val docId: String)
     data class CultureItem(val cultureName: String, val varienty: String, val boardingMonth: String, val growingSeason: String, val imagePath: String, val docId: String)
     var cultureNameItems = ArrayList<CultureItem>()
@@ -80,20 +84,36 @@ class SowingsDetailFragment : Fragment() {
             newSowing = false
             changeInputType(false)
             showMenuButtons()
+            if(sowingData.status == true){
+                harvestBtn.isVisible = true
+            }
+        }
+        else{
+            saveBtn.text = "Создать посев"
         }
         loadData()
+        tvDateStart.setInputType(InputType.TYPE_NULL)
+        tvDateEnd.setInputType(InputType.TYPE_NULL)
     }
 
     private fun initializeViews(view: View) {
         harvestLayout = view.findViewById(R.id.harvestLayout)
-        pickDateStartBtn = view.findViewById(R.id.pickDateStartBtn)
-        pickDateEndBtn = view.findViewById(R.id.pickDateEndBtn)
-        pickDateStartBtn.setOnClickListener {
-            showDatePickerDialog(true)
+        startDateLayout = view.findViewById(R.id.startDateLayout)
+        endDateLayout = view.findViewById(R.id.endDateLayout)
+        startDateLayout.setEndIconOnClickListener{
+            if(isEditMode || sowingData.docId == null){
+                showDatePickerDialog(true)
+                startDateLayout.isFocusable = true
+            }
         }
-        pickDateEndBtn.setOnClickListener {
+        endDateLayout.setEndIconOnClickListener{
             showDatePickerDialog(false)
+            endDateLayout.isFocusable = true
         }
+
+        fieldLayout = view.findViewById(R.id.fieldLayout)
+        cultureLayout = view.findViewById(R.id.cultureLayout)
+        varientyLayout = view.findViewById(R.id.varientyLayout)
 
         svField = view.findViewById(R.id.svField)
         svCulture = view.findViewById(R.id.svCulture)
@@ -102,45 +122,60 @@ class SowingsDetailFragment : Fragment() {
         tvCountHarvest = view.findViewById(R.id.tvCountHarvest)
         tvDateStart = view.findViewById(R.id.tvDateStart)
         tvDateEnd = view.findViewById(R.id.tvDateEnd)
-        tvDateEnd = view.findViewById(R.id.tvDateEnd)
-        svStatus = view.findViewById(R.id.svStatus)
-        val statusAdapter = ArrayAdapter(view.context, R.layout.spinner_item, resources.getStringArray(R.array.sowingStatus))
-        statusAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-        svStatus.setAdapter(statusAdapter)
 
+        cancelBtn = view.findViewById(R.id.cancelBtn)
+        harvestBtn = view.findViewById(R.id.harvestBtn)
         saveBtn = view.findViewById(R.id.saveBtn)
-        saveBtn.setOnClickListener {
-            updateData()
+        if(sowingData.docId == null) {
+            saveBtn.setOnClickListener {
+                updateData()
+            }
+        }
+        harvestBtn.setOnClickListener {
+            if(sowingData.status == true) {
+                isHarvestMode = true
+                showHarvest()
+            }
+        }
+        cancelBtn.setOnClickListener {
+            if(cancelBtn.isVisible) {
+                isHarvestMode = false
+                showHarvest()
+            }
         }
     }
+
     private fun showMenuButtons(){
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
-                menuInflater.inflate(R.menu.editsowing_menu, menu)
+                menuInflater.inflate(R.menu.edit_menu, menu)
+                val myMenuItem = menu.findItem(R.id.editBtn)
+                saveBtn.setOnClickListener {
+                    updateData()
+                    if(isEditMode){
+                        myMenuItem?.setIcon(R.drawable.cancel_ic)
+                    }
+                    else{
+                        myMenuItem?.setIcon(R.drawable.edit_icon)
+                    }
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 val id = menuItem.itemId
                 //handle item clicks
                 if (id == R.id.editBtn) {
-                    if (isEditMode) {
-                        menuItem.setIcon(R.drawable.edit_icon)
-                    } else {
-                        menuItem.setIcon(R.drawable.cancel_ic)
+                    if(!isHarvestMode) {
+                        if (isEditMode) {
+                            menuItem.setIcon(R.drawable.edit_icon)
+                        } else {
+                            menuItem.setIcon(R.drawable.cancel_ic)
+                        }
+                        showData(false)
+                        isEditMode = !isEditMode
                     }
-                    showData(false)
-                    isEditMode = !isEditMode
-                }
-                if (id == R.id.harvestBtn) {
-                    if (isHarvestMode) {
-                        menuItem.setIcon(R.drawable.harvest_icon)
-                    } else {
-                        menuItem.setIcon(R.drawable.back_icon)
-                    }
-                    isHarvestMode = !isHarvestMode
-                    showHarvest()
                 }
                 if (id == R.id.deleteBtn) {
                     deleteDialog()
@@ -149,11 +184,13 @@ class SowingsDetailFragment : Fragment() {
             }
         }, viewLifecycleOwner)
     }
+
     private fun deleteDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_custom, null)
         val customDialog = AlertDialog.Builder(view?.context)
             .setView(dialogView)
             .show()
+        customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
         val btDismiss = dialogView.findViewById<Button>(R.id.btDismissCustomDialog)
         val btPositive = dialogView.findViewById<Button>(R.id.btPositiveCustomDialog)
         btDismiss.setOnClickListener {
@@ -184,10 +221,10 @@ class SowingsDetailFragment : Fragment() {
         DatePickerDialog(requireView().context,
             { _, selectedYear, selectedMonth, dayOfMonth ->
                 if(startDate) {
-                    tvDateStart.text = "${dayOfMonth}.${selectedMonth + 1}.$selectedYear"
+                    tvDateStart.setText("${dayOfMonth}.${selectedMonth + 1}.$selectedYear")
                 }
                 else{
-                    tvDateEnd.text = "${dayOfMonth}.${selectedMonth + 1}.$selectedYear"
+                    tvDateEnd.setText("${dayOfMonth}.${selectedMonth + 1}.$selectedYear")
                 }
             }, year, month, day
         ).show()
@@ -197,7 +234,7 @@ class SowingsDetailFragment : Fragment() {
             if (task.isSuccessful) {
                 for (document in task.result) {
                     val name = document.getString("name")
-                    val size = document.getString("name")
+                    val size = document.getString("size")
                     val docId = document.id
                     fieldItems.add(FieldItem(name.toString(), size.toString(),docId))
                 }
@@ -206,9 +243,6 @@ class SowingsDetailFragment : Fragment() {
                 arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                 svField.setAdapter(arrayAdapter)
                 arrayAdapter.notifyDataSetChanged()
-                if(sowingData.docId != null){
-                    svField.setSelection(fieldItems.indexOfFirst { it.docId == sowingData.field!!["docId"] })
-                }
             }
         }
     }
@@ -231,94 +265,127 @@ class SowingsDetailFragment : Fragment() {
                 cultureAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                 svCulture.setAdapter(cultureAdapter)
                 cultureAdapter.notifyDataSetChanged()
-                if(sowingData.docId != null){
-                    svCulture.setSelection(cultureNameItems.indexOfFirst { it.cultureName == sowingData.culture!!["cultureName"] })
+                if(sowingData.docId != null) {
+                    setupVarientySpinner(cultureItems as ArrayList<CultureItem>)
                 }
 
-
-                svCulture.onItemSelectedListener = object : OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        varientyItems = cultureItems.filter { it.cultureName == svCulture.selectedItem.toString() } as ArrayList<CultureItem>
-                        val varientyAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_item, varientyItems.map { it.varienty })
-                        varientyAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-                        svVarienty.setAdapter(varientyAdapter)
-                        varientyAdapter.notifyDataSetChanged()
-                        if(sowingData.docId != null){
-                            svVarienty.setSelection(varientyItems.indexOfFirst { it.docId == sowingData.culture!!["docId"] })
-                        }
-                    }
-
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
-                        // Действия при отсутствии выбора
-                    }
+                svCulture.setOnItemClickListener { parent, view, position, id ->
+                    setupVarientySpinner(cultureItems as ArrayList<CultureItem>)
                 }
             }
         }
     }
+
+    private fun setupVarientySpinner(cultureItems: ArrayList<CultureItem>){
+        varientyItems = cultureItems.filter { it.cultureName == svCulture.text.toString() } as ArrayList<CultureItem>
+        val varientyAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_item, varientyItems.map { it.varienty })
+        varientyAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svVarienty.setAdapter(varientyAdapter)
+        varientyAdapter.notifyDataSetChanged()
+        svVarienty.setText(varientyItems.first().varienty, false)
+    }
+
     private fun loadData(){
         if(sowingData.docId != null) {
-            svField.setSelection(fieldItems.indexOfFirst { it.docId == sowingData.field!!["docId"] })
-            svCulture.setSelection(cultureNameItems.indexOfFirst { it.cultureName == sowingData.culture!!["cultureName"] })
+            svField.setText(sowingData.field!!["name"], false)
+            svCulture.setText(sowingData.culture!!["cultureName"], false)
+            svVarienty.setText(sowingData.culture!!["varienty"], false)
             tvCount.setText(sowingData.count.toString())
-            tvDateStart.text = sowingData.date
-            if (sowingData.status!!) {
-                svStatus.setSelection(1)
-            } else {
-                svStatus.setSelection(0)
-            }
+            tvDateStart.setText(sowingData.date)
         }
     }
     private fun updateData(){
-        if(svStatus.selectedItemPosition == 0){
-            sowingData.status = false
+        val errors = mutableListOf<String>()
+        if(!isHarvestMode) {
+            if(svField.text.isNullOrBlank() || svField.text.isNullOrEmpty()){
+                errors.add("- Поле")
+            }
+            if(svVarienty.text.isNullOrBlank() || svVarienty.text.isNullOrEmpty()){
+                errors.add("- Культура и сорт")
+            }
+            tvCount.setText(tvCount.text.toString().replace(',', '.'))
+            tvCount.setSelection(tvCount.getText().length)
+            if(tvCount.text.isNullOrBlank() || tvCount.text.isNullOrEmpty() || tvCount.text.toString().toDoubleOrNull() == null){
+                errors.add("- Количество посева")
+            }
+            if(tvDateStart.text.isNullOrBlank() || tvDateStart.text.isNullOrEmpty()){
+                errors.add("- Дата посева")
+            }
         }
-        else if(svStatus.selectedItemPosition == 1){
-            sowingData.status = true
+        else{
+            tvCountHarvest.setText(tvCountHarvest.text.toString().replace(',', '.'))
+            tvCountHarvest.setSelection(tvCountHarvest.getText().length)
+            if (tvCountHarvest.text.isNullOrBlank() || tvCountHarvest.text.isNullOrEmpty() || tvCountHarvest.text.toString().toDoubleOrNull() == null) {
+                errors.add("- Количество урожая")
+            }
+            if (tvDateEnd.text.isNullOrBlank() || tvDateEnd.text.isNullOrEmpty()) {
+                errors.add("- Дата уборки")
+            }
         }
-        sowingData.date = tvDateStart.text.toString()
-        sowingData.count = tvCount.text.toString().toDouble()
-        sowingData.culture = mapOf(
-            "cultureName" to varientyItems[svVarienty.selectedItemPosition].cultureName,
-            "varienty" to varientyItems[svVarienty.selectedItemPosition].varienty,
-            "boardingMonth" to varientyItems[svVarienty.selectedItemPosition].boardingMonth,
-            "growingSeason" to varientyItems[svVarienty.selectedItemPosition].growingSeason,
-            "imagePath" to varientyItems[svVarienty.selectedItemPosition].imagePath,
-            "docId" to varientyItems[svVarienty.selectedItemPosition].docId
-        )
-        sowingData.field = mapOf(
-            "name" to fieldItems[svField.selectedItemPosition].fieldName,
-            "size" to fieldItems[svField.selectedItemPosition].size,
-            "docId" to fieldItems[svField.selectedItemPosition].docId
-        )
-        val updates = mapOf(
-            "culture" to sowingData.culture,
-            "field" to sowingData.field,
-            "status" to sowingData.status,
-            "count" to sowingData.count,
-            "date" to sowingData.date
-        )
-        if(sowingData.docId != null) {
-            db.collection("Sowings").document(sowingData.docId.toString()).update(updates)
-                .addOnSuccessListener {
+        if(errors.size > 0){
+            createDialog(errors)
+        }
+        else {
+            if(!isEditMode) {
+                sowingData.status = !isHarvestMode
+            }
+            sowingData.date = tvDateStart.text.toString()
+            sowingData.count = tvCount.text.toString().toDouble()
+            val selectedItemCulture = varientyItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0}
+            sowingData.culture = mapOf(
+                "cultureName" to varientyItems[selectedItemCulture].cultureName,
+                "varienty" to varientyItems[selectedItemCulture].varienty,
+                "boardingMonth" to varientyItems[selectedItemCulture].boardingMonth,
+                "growingSeason" to varientyItems[selectedItemCulture].growingSeason,
+                "imagePath" to varientyItems[selectedItemCulture].imagePath,
+                "docId" to varientyItems[selectedItemCulture].docId
+            )
+            val selectedItemField = fieldItems.indexOfFirst { it.fieldName.compareTo(svField.text.toString()) == 0}
+            sowingData.field = mapOf(
+                "name" to fieldItems[selectedItemField].fieldName,
+                "size" to fieldItems[selectedItemField].size,
+                "docId" to fieldItems[selectedItemField].docId
+            )
+            val updates = mapOf(
+                "culture" to sowingData.culture,
+                "field" to sowingData.field,
+                "status" to sowingData.status,
+                "count" to sowingData.count,
+                "date" to sowingData.date
+            )
 
+            if (sowingData.docId != null) {
+                db.collection("Sowings").document(sowingData.docId.toString()).update(updates)
+                    .addOnSuccessListener {
+
+                    }
+                    .addOnFailureListener {
+
+                    }
+
+                if (isHarvestMode) {
+                    val harvest = mapOf(
+                        "culture" to sowingData.culture,
+                        "field" to sowingData.field,
+                        "sowing" to mapOf(
+                            "docId" to sowingData.docId,
+                            "count" to sowingData.count,
+                            "date" to sowingData.date
+                        ),
+                        "count" to tvCountHarvest.text.toString().toDouble(),
+                        "date" to tvDateEnd.text.toString()
+                    )
+                    db.collection("Harvests").document(UUID.randomUUID().toString()).set(harvest)
+                        .addOnSuccessListener {
+
+                        }
+                        .addOnFailureListener {
+
+                        }
                 }
-                .addOnFailureListener {
-
-                }
-
-            if(isHarvestMode){
-                val harvest = mapOf(
-                    "culture" to sowingData.culture,
-                    "field" to sowingData.field,
-                    "sowing" to mapOf(
-                        "docId" to sowingData.docId,
-                        "count" to sowingData.count,
-                        "date" to sowingData.date
-                    ),
-                    "count" to tvCountHarvest.text.toString().toDouble(),
-                    "date" to tvDateEnd.text.toString()
-                )
-                db.collection("Harvests").document(UUID.randomUUID().toString()).set(harvest)
+            } else {
+                sowingData.docId = UUID.randomUUID().toString()
+                db.collection("Sowings").document(sowingData.docId!!).set(updates)
                     .addOnSuccessListener {
 
                     }
@@ -326,31 +393,42 @@ class SowingsDetailFragment : Fragment() {
 
                     }
             }
+            showData(true)
         }
-        else{
-            sowingData.docId = UUID.randomUUID().toString()
-            db.collection("Sowings").document(sowingData.docId!!).set(updates)
-                .addOnSuccessListener {
-
-                }
-                .addOnFailureListener {
-
-                }
-        }
-        showData(true)
     }
+
+    private fun createDialog(messages: MutableList<String>) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_message, null)
+        val customDialog = AlertDialog.Builder(view?.context)
+            .setView(dialogView)
+            .show()
+        customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
+        val textView = dialogView.findViewById<TextView>(R.id.tvMessage)
+        val listAsString = messages.joinToString("\n")
+        textView.text = listAsString
+        val okBtn = dialogView.findViewById<Button>(R.id.okBtn)
+        okBtn.setOnClickListener {
+            customDialog.dismiss()
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private fun showData(save : Boolean){
         if(save){
             loadData()
             changeInputType(false)
             saveBtn.isVisible = false
-            if(isHarvestMode){
-                isHarvestMode = !isHarvestMode
-                showHarvest()
+            if(isEditMode){
+                isEditMode = false
             }
             if(newSowing){
-                Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Запись о посеве создана", Snackbar.LENGTH_SHORT).show()
+                findNavController().navigate(SowingsDetailFragmentDirections.actionSowingsDetailFragmentToSowingsFragment())
+            }
+            else if(isHarvestMode){
+                showHarvest()
+                isHarvestMode = false
+                Snackbar.make(requireView(), "Запись о урожае создана", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(SowingsDetailFragmentDirections.actionSowingsDetailFragmentToSowingsFragment())
             }
             else{
@@ -361,58 +439,82 @@ class SowingsDetailFragment : Fragment() {
             if(!saveBtn.isVisible) {
                 changeInputType(true)
                 saveBtn.isVisible = true
+                if(sowingData.status == true){
+                    harvestBtn.isVisible = false
+                }
             }
             else{
                 loadData()
                 changeInputType(false)
                 saveBtn.isVisible = false
+                if(sowingData.status == true){
+                    harvestBtn.isVisible = true
+                }
             }
         }
     }
     @SuppressLint("ClickableViewAccessibility")
     private fun changeInputType(type:Boolean){
         if(type){
+            fieldLayout.isEndIconVisible = true
+            cultureLayout.isEndIconVisible = true
+            varientyLayout.isEndIconVisible = true
             tvCount.setInputType(InputType.TYPE_CLASS_TEXT)
             svField.setOnTouchListener { v, event ->
+                svField.showDropDown()
                 false
             }
             svCulture.setOnTouchListener { v, event ->
+                svCulture.showDropDown()
                 false
             }
             svVarienty.setOnTouchListener { v, event ->
+                svVarienty.showDropDown()
                 false
             }
-            svStatus.setOnTouchListener { v, event ->
-                false
-            }
-            pickDateStartBtn.isClickable = true
         }
         else{
+            fieldLayout.isEndIconVisible = false
+            cultureLayout.isEndIconVisible = false
+            varientyLayout.isEndIconVisible = false
             tvCount.setInputType(InputType.TYPE_NULL)
             svField.setOnTouchListener { v, event ->
+                svField.requestFocus()
                 true
             }
             svCulture.setOnTouchListener { v, event ->
+                svCulture.requestFocus()
                 true
             }
             svVarienty.setOnTouchListener { v, event ->
+                svVarienty.requestFocus()
                 true
             }
-            svStatus.setOnTouchListener { v, event ->
-                true
-            }
-            pickDateStartBtn.isClickable = false
         }
     }
 
     private fun showHarvest(){
-        if(isHarvestMode){
-            harvestLayout.isVisible = true
-            saveBtn.isVisible = true
+        if(sowingData.status == true) {
+            if (isHarvestMode) {
+                harvestLayout.isVisible = true
+                saveBtn.isVisible = true
+                cancelBtn.isVisible = true
+                harvestBtn.isVisible = false
+                saveBtn.text = "Завершить"
+                saveBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.yellow) )
+            } else {
+                harvestLayout.isVisible = false
+                saveBtn.isVisible = false
+                cancelBtn.isVisible = false
+                harvestBtn.isVisible = true
+                saveBtn.text = "Сохранить"
+                saveBtn.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.focused) )
+            }
         }
         else{
             harvestLayout.isVisible = false
             saveBtn.isVisible = false
+            cancelBtn.isVisible = false
         }
     }
 }

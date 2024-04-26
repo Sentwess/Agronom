@@ -1,54 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_border"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@drawable/ic_launcher_background"
-        android:text="Удаление записи"
-        android:textSize="20sp"
-        android:textColor="@android:color/white"
-        android:gravity="center"
-        />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Вы действительно хотите удалить запись?"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:layout_marginTop="40dp"
-        android:layout_marginBottom="40dp"
-        />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#DEDEDE"
-        />
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/focused"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:text="Удаление записи"
+            android:textColor="@android:color/white"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="40dp"
+            android:layout_marginHorizontal="20dp"
+            android:fontFamily="@font/poppins_regular"
+            android:gravity="center"
+            android:text="Вы действительно хотите удалить запись?"
+            android:textSize="18sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#DEDEDE" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:padding="2dp"
-            android:orientation="horizontal">
+            android:layout_gravity="end"
+            android:layout_marginHorizontal="5dp"
+            android:orientation="horizontal"
+            android:padding="2dp">
+
             <Button
                 android:id="@+id/btDismissCustomDialog"
+                style="?attr/materialButtonOutlinedStyle"
+                app:strokeColor="@color/focused"
+                android:fontFamily="@font/poppins_regular"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:textSize="16sp"
                 android:text="Нет"
-                />
+                android:textSize="16sp" />
+
             <Button
                 android:id="@+id/btPositiveCustomDialog"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+
+                android:fontFamily="@font/poppins_regular"
                 android:layout_marginHorizontal="5dp"
-                android:textSize="16sp"
                 android:text="Да"
-                />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

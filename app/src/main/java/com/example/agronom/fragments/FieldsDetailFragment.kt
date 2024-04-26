@@ -13,7 +13,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
-import android.widget.Spinner
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -23,6 +22,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.agronom.R
 import com.example.agronom.data.Fields
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.UUID
 
@@ -31,7 +31,7 @@ class FieldsDetailFragment : Fragment() {
     private lateinit var db : FirebaseFirestore
     private lateinit var tvName : EditText
     private lateinit var tvSize : EditText
-    private lateinit var svStatus : Spinner
+    private lateinit var svStatus : MaterialAutoCompleteTextView
     private lateinit var saveBtn : Button
     lateinit var fieldData : Fields
     var newField : Boolean = true
@@ -131,10 +131,10 @@ class FieldsDetailFragment : Fragment() {
     private fun updateData(){
         fieldData.name = tvName.text.toString()
         fieldData.size = tvSize.text.toString()
-        if(svStatus.selectedItemPosition == 0){
+        if(svStatus.text.contains("Свободно")){
             fieldData.status = false
         }
-        else if(svStatus.selectedItemPosition == 1){
+        else{
             fieldData.status = true
         }
 

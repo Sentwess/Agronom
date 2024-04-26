@@ -7,4 +7,4 @@ import kotlinx.parcelize.Parcelize
 data class Fields(var docId : String ?= null,
                     var name : String ?= null,
                     var size : String ?= null,
-                    var status : Boolean ?= null, ) : Parcelable
+                    var status : Boolean ?= null) : Parcelable

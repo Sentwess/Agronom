@@ -16,6 +16,7 @@
         <item name="android:textColorHint">@android:color/darker_gray</item>
         <item name="searchViewStyle">@style/SearchViewStyle</item>
     </style>
+
     <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
         <item name="searchIcon">@null</item>
         <item name="queryBackground">@null</item>
@@ -26,6 +27,18 @@
     <style name="ButtonStyle" parent="android:Widget.Button">
         <item name="android:background">@color/focused</item>
         <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="EditTextStyle" parent="android:Widget.EditText">
+        <item name="android:textColor">@color/mText</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:padding">14dp</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ToggleButtonGroupStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="backgroundTint">@color/button_toggle_bg</item>
     </style>
 
 </resources>

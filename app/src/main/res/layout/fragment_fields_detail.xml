@@ -47,106 +47,93 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/gray"
-            android:fontFamily="@font/poppins_medium"
             android:text="Название"
-            android:textSize="18sp" />
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/outlinedTextFieldN"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TextInputLayoutN"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:boxCornerRadiusBottomEnd="50dp"
+            app:boxCornerRadiusBottomStart="50dp"
+            app:boxCornerRadiusTopEnd="50dp"
+            app:boxCornerRadiusTopStart="50dp"
+            app:hintEnabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tvName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:textColor="@color/blue"
-                android:textSize="20sp"
-                android:padding="12dp"
-                android:hint="Например: Восточное"
-                android:maxLines="1"/>
+                android:textColor="@color/mText"
+                android:hint="Восточное"
+                android:theme="@style/EditTextStyle"/>
 
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="15dp"
-            android:background="@color/gray"
-            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/gray"
-            android:fontFamily="@font/poppins_medium"
             android:text="Состояние"
-            android:textSize="18sp" />
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/blue"
+            android:textSize="20sp"/>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/outlinedTextFieldB"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TextInputLayoutS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:boxCornerRadiusBottomEnd="50dp"
+            app:boxCornerRadiusBottomStart="50dp"
+            app:boxCornerRadiusTopEnd="50dp"
+            app:boxCornerRadiusTopStart="50dp"
+            app:hintEnabled="false"
+            app:endIconMode="dropdown_menu"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <Spinner
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                 android:id="@+id/svStatus"
+                android:inputType="none"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:dropDownVerticalOffset="60dp"/>
+                android:textColor="@color/mText"
+                android:theme="@style/EditTextStyle"/>
 
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginVertical="15dp"
-            android:background="@color/gray"
-            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:textColor="@color/gray"
-            android:fontFamily="@font/poppins_medium"
             android:text="Площадь, Га"
-            android:textSize="18sp" />
+            android:fontFamily="@font/poppins_semibold"
+            android:textColor="@color/blue"
+            android:textSize="20sp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/outlinedTextFieldА"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TextInputLayoutP"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:boxCornerRadiusBottomEnd="50dp"
+            app:boxCornerRadiusBottomStart="50dp"
+            app:boxCornerRadiusTopEnd="50dp"
+            app:boxCornerRadiusTopStart="50dp"
+            app:hintEnabled="false"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tvSize"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:textSize="20sp"
-                android:textColor="@color/blue"
-                android:padding="12dp"
-                android:maxLines="1"
-                android:hint="Например: 52"/>
+                android:textColor="@color/mText"
+                android:hint="52 Га"
+                android:theme="@style/EditTextStyle"/>
 
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="20dp"
-            android:background="@color/gray"
-            />
 
         <Button
             android:id="@+id/saveBtn"
