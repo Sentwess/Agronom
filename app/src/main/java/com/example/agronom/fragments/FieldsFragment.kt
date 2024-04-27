@@ -231,6 +231,31 @@ class FieldsFragment : Fragment() {
                 }.addOnFailureListener { e ->
 
                 }
+
+            db.collection("Harvests").whereEqualTo("field.docId", fieldData.docId).get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val docId = document.id
+                        val status = when (fieldData.status) {
+                            true -> "Засеяно"
+                            false -> "Свободно"
+                            null -> ""
+                        }
+                        val data = mapOf(
+                            "field.name" to fieldData.name,
+                            "field.size" to fieldData.size,
+                            "field.status" to status
+                        )
+
+                        db.collection("Harvests").document(docId).update(data).addOnSuccessListener {
+
+                        }.addOnFailureListener { e ->
+
+                        }
+                    }
+                }.addOnFailureListener { e ->
+
+                }
         } else {
             fieldData.docId = UUID.randomUUID().toString()
             db.collection("Fields").document(fieldData.docId!!).set(updates).addOnSuccessListener {

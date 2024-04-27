@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ExpandableListAdapter
+import android.widget.ExpandableListView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -26,9 +28,12 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.agronom.R
+import com.example.agronom.adapters.CultureViewAdapter
+import com.example.agronom.adapters.HarvestViewAdapter
 import com.example.agronom.data.Sowings
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Calendar
 import java.util.UUID
@@ -55,11 +60,20 @@ class SowingsDetailFragment : Fragment() {
     private lateinit var harvestLayout : LinearLayout
     private lateinit var startDateLayout : TextInputLayout
     private lateinit var endDateLayout : TextInputLayout
+    private lateinit var cultureAdapter : CultureViewAdapter
+    private lateinit var harvestAdapter : HarvestViewAdapter
+    private lateinit var expListViewCulture : ExpandableListView
+    private lateinit var expListViewHarvest : ExpandableListView
     data class FieldItem(val fieldName: String, val size: String, val docId: String)
     data class CultureItem(val cultureName: String, val varienty: String, val boardingMonth: String, val growingSeason: String, val imagePath: String, val docId: String)
     var cultureNameItems = ArrayList<CultureItem>()
     var varientyItems = ArrayList<CultureItem>()
     val fieldItems = ArrayList<FieldItem>()
+    var cultureItems = ArrayList<CultureItem>()
+
+    var cultureView = mapOf<String,String>()
+    var harvestView = mapOf<String,String>()
+
     var isEditMode = false
     var isHarvestMode = false
 
@@ -97,6 +111,9 @@ class SowingsDetailFragment : Fragment() {
     }
 
     private fun initializeViews(view: View) {
+        expListViewCulture = view.findViewById(R.id.expListViewCulture)
+        expListViewHarvest = view.findViewById(R.id.expListViewHarvest)
+
         harvestLayout = view.findViewById(R.id.harvestLayout)
         startDateLayout = view.findViewById(R.id.startDateLayout)
         endDateLayout = view.findViewById(R.id.endDateLayout)
@@ -243,13 +260,62 @@ class SowingsDetailFragment : Fragment() {
                 arrayAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
                 svField.setAdapter(arrayAdapter)
                 arrayAdapter.notifyDataSetChanged()
+                loadHarvestView()
             }
         }
+        svField.setOnItemClickListener { parent, view, position, id ->
+            loadHarvestView()
+        }
+
+        harvestAdapter = HarvestViewAdapter(requireContext(), harvestView)
+        expListViewHarvest.setAdapter(harvestAdapter)
+        expListViewHarvest.setOnGroupClickListener { parent, v, groupPosition, id ->
+            setListViewHeight(parent, groupPosition)
+            false
+        }
     }
+
+    private fun loadHarvestView(){
+        val selectedItemField = fieldItems.indexOfFirst { it.fieldName.compareTo(svField.text.toString()) == 0}
+        if(!svField.text.isNullOrEmpty() && selectedItemField > -1) {
+            val docIdField = fieldItems[selectedItemField].docId
+            var lastDocument: DocumentSnapshot? = null // Переменная для хранения последнего документа
+            db.collection("Harvests")
+                .whereEqualTo("field.docId", docIdField)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result) {
+                            // Сохраняем последний документ в переменной lastDocument
+                            lastDocument = document
+                        }
+                        harvestView = mapOf(
+                            "culture" to lastDocument?.get("culture.cultureName").toString(),
+                            "imagePath" to lastDocument?.get("culture.imagePath").toString(),
+                            "varienty" to lastDocument?.get("culture.varienty").toString(),
+                            "field" to lastDocument?.get("field.name").toString(),
+                            "count" to lastDocument?.get("count").toString(),
+                            "date" to lastDocument?.get("date").toString()
+                        )
+                        if(harvestView["culture"]?.contains("null") != true) {
+                            expListViewHarvest.isVisible = true
+                            harvestAdapter.updateInfo(harvestView)
+                        }
+                        else{
+                            expListViewHarvest.isVisible = false
+                        }
+                    }
+                }
+        }
+        else{
+            expListViewHarvest.isVisible = false
+        }
+    }
+
     private fun setupCulturesSpinner() {
         db.collection("Cultures").get().addOnCompleteListener{ task ->
             if (task.isSuccessful) {
-                val cultureItems = task.result.documents.map { document ->
+                cultureItems = task.result.documents.map { document ->
                     CultureItem(
                         document.getString("cultureName").toString(),
                         document.getString("varienty").toString(),
@@ -258,22 +324,88 @@ class SowingsDetailFragment : Fragment() {
                         document.getString("imagePath").toString(),
                         document.id
                     )
-                }
+                } as ArrayList<CultureItem>
 
                 cultureNameItems = cultureItems.distinctBy{ t -> t.cultureName } as ArrayList<CultureItem>
-                val cultureAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_item, cultureNameItems.map { it.cultureName })
-                cultureAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
-                svCulture.setAdapter(cultureAdapter)
-                cultureAdapter.notifyDataSetChanged()
+                val culturesAdapter = ArrayAdapter(requireActivity().applicationContext, R.layout.spinner_item, cultureNameItems.map { it.cultureName })
+                culturesAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+                svCulture.setAdapter(culturesAdapter)
+                culturesAdapter.notifyDataSetChanged()
+
                 if(sowingData.docId != null) {
-                    setupVarientySpinner(cultureItems as ArrayList<CultureItem>)
+                    setupVarientySpinner(cultureItems)
+                    svVarienty.setText(sowingData.culture!!["varienty"], false)
                 }
 
+                cultureAdapter = CultureViewAdapter(requireContext(), cultureView)
+                expListViewCulture.setAdapter(cultureAdapter)
+                expListViewCulture.setOnGroupClickListener { parent, v, groupPosition, id ->
+                    setListViewHeight(parent, groupPosition)
+                    false
+                }
+                loadCultureView()
+
                 svCulture.setOnItemClickListener { parent, view, position, id ->
-                    setupVarientySpinner(cultureItems as ArrayList<CultureItem>)
+                    setupVarientySpinner(cultureItems)
+                    loadCultureView()
+                }
+
+                svVarienty.setOnItemClickListener { parent, view, position, id ->
+                    loadCultureView()
                 }
             }
         }
+    }
+
+    private fun loadCultureView(){
+        if(!svVarienty.text.isNullOrEmpty()) {
+            expListViewCulture.isVisible = true
+            val selectedItemCulture = varientyItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0 }
+            cultureView = mapOf(
+                "cultureName" to varientyItems[selectedItemCulture].cultureName,
+                "varienty" to varientyItems[selectedItemCulture].varienty,
+                "boardingMonth" to varientyItems[selectedItemCulture].boardingMonth,
+                "growingSeason" to varientyItems[selectedItemCulture].growingSeason,
+                "imagePath" to varientyItems[selectedItemCulture].imagePath,
+            )
+            cultureAdapter.updateCropInfo(cultureView)
+        }
+        else{
+            expListViewCulture.isVisible = false
+        }
+    }
+
+    private fun setListViewHeight(
+        listView: ExpandableListView,
+        group: Int
+    ) {
+        val listAdapter = listView.expandableListAdapter as ExpandableListAdapter
+        var totalHeight = 0
+        val desiredWidth = View.MeasureSpec.makeMeasureSpec(
+            listView.width,
+            View.MeasureSpec.EXACTLY
+        )
+        for (i in 0 until listAdapter.groupCount) {
+            val groupItem = listAdapter.getGroupView(i, false, null, listView)
+            groupItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED)
+            totalHeight += groupItem.measuredHeight
+            if (listView.isGroupExpanded(i) && i != group || !listView.isGroupExpanded(i) && i == group) {
+                for (j in 0 until listAdapter.getChildrenCount(i)) {
+                    val listItem = listAdapter.getChildView(
+                        i, j, false, null,
+                        listView
+                    )
+                    listItem.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED)
+                    totalHeight += listItem.measuredHeight
+                }
+            }
+        }
+        val params = listView.layoutParams
+        var height = totalHeight + listView.dividerHeight * (listAdapter.groupCount - 1)
+        if (height < 10) height = 200
+        params.height = height
+        listView.setLayoutParams(params)
+        listView.requestLayout()
     }
 
     private fun setupVarientySpinner(cultureItems: ArrayList<CultureItem>){
@@ -331,14 +463,14 @@ class SowingsDetailFragment : Fragment() {
             }
             sowingData.date = tvDateStart.text.toString()
             sowingData.count = tvCount.text.toString().toDouble()
-            val selectedItemCulture = varientyItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0}
+            val selectedItemCulture = cultureItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0}
             sowingData.culture = mapOf(
-                "cultureName" to varientyItems[selectedItemCulture].cultureName,
-                "varienty" to varientyItems[selectedItemCulture].varienty,
-                "boardingMonth" to varientyItems[selectedItemCulture].boardingMonth,
-                "growingSeason" to varientyItems[selectedItemCulture].growingSeason,
-                "imagePath" to varientyItems[selectedItemCulture].imagePath,
-                "docId" to varientyItems[selectedItemCulture].docId
+                "cultureName" to cultureItems[selectedItemCulture].cultureName,
+                "varienty" to cultureItems[selectedItemCulture].varienty,
+                "boardingMonth" to cultureItems[selectedItemCulture].boardingMonth,
+                "growingSeason" to cultureItems[selectedItemCulture].growingSeason,
+                "imagePath" to cultureItems[selectedItemCulture].imagePath,
+                "docId" to cultureItems[selectedItemCulture].docId
             )
             val selectedItemField = fieldItems.indexOfFirst { it.fieldName.compareTo(svField.text.toString()) == 0}
             sowingData.field = mapOf(
@@ -445,6 +577,8 @@ class SowingsDetailFragment : Fragment() {
             }
             else{
                 loadData()
+                loadCultureView()
+                loadHarvestView()
                 changeInputType(false)
                 saveBtn.isVisible = false
                 if(sowingData.status == true){

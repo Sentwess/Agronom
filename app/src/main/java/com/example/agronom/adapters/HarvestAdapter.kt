@@ -28,7 +28,8 @@ class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerVi
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = harvestList[position]
-        holder.culture.text = currentItem.culture?.get("cultureName") + "(${currentItem.culture?.get("varienty")})"
+        holder.culture.text = currentItem.culture?.get("cultureName")
+        holder.varienty.text = currentItem.culture?.get("varienty")
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
         holder.count.text = currentItem.count.toString() + " т."
@@ -37,6 +38,7 @@ class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerVi
 
     class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val culture : TextView = itemView.findViewById(R.id.tvCulture)
+        val varienty : TextView = itemView.findViewById(R.id.tvcultureVarienty)
         val field : TextView = itemView.findViewById(R.id.tvField)
         val count : TextView = itemView.findViewById(R.id.tvCount)
         val date : TextView = itemView.findViewById(R.id.tvDate)

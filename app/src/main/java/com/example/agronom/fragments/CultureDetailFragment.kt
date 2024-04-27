@@ -98,7 +98,7 @@ class CultureDetailFragment : Fragment() {
                 filePath = null
             }
             imageLast = culture.imagePath
-            culture.imagePath = "https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2FCover.png?alt=media&token=073bfc13-a9fb-4f43-8479-2bec4079d4d7"
+            culture.imagePath = "https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2Fwheat.png?alt=media&token=fc45c7d6-abb1-4dbf-b930-73d49202a24d"
             Glide.with(this).load(culture.imagePath).into(imageView)
         }
 
@@ -295,6 +295,8 @@ class CultureDetailFragment : Fragment() {
                             val data = mapOf(
                                 "culture.cultureName" to culture.cultureName,
                                 "culture.varienty" to culture.varienty,
+                                "culture.boardingMonth" to culture.boardingMonth,
+                                "culture.growingSeason" to culture.growingSeason,
                                 "culture.imagePath" to uri
                             )
 
@@ -311,6 +313,35 @@ class CultureDetailFragment : Fragment() {
                     .addOnFailureListener { e ->
 
                     }
+
+                db.collection("Harvests")
+                    .whereEqualTo("culture.docId", culture.docId)
+                    .get()
+                    .addOnSuccessListener { documents ->
+                        for (document in documents) {
+                            val docId = document.id
+                            val data = mapOf(
+                                "culture.cultureName" to culture.cultureName,
+                                "culture.varienty" to culture.varienty,
+                                "culture.boardingMonth" to culture.boardingMonth,
+                                "culture.growingSeason" to culture.growingSeason,
+                                "culture.imagePath" to uri
+                            )
+
+                            db.collection("Harvests").document(docId)
+                                .update(data)
+                                .addOnSuccessListener {
+
+                                }
+                                .addOnFailureListener { e ->
+
+                                }
+                        }
+                    }
+                    .addOnFailureListener { e ->
+
+                    }
+
             } else {
                 culture.docId = UUID.randomUUID().toString()
                 db.collection("Cultures").document(culture.docId!!).set(updates)
