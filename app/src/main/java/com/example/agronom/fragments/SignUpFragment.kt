@@ -51,18 +51,21 @@ class SignUpFragment : Fragment() {
                 } else {
                     Toast.makeText(context, "Неверный пароль", Toast.LENGTH_SHORT).show()
                 }
-            } else
+            } else {
                 Toast.makeText(context, "Введите почту и пароль", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
 
     private fun registerUser(email: String, pass: String) {
         mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener {
-            if (it.isSuccessful)
-                navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToMainFragment())
-            else
+            if (it.isSuccessful) {
+                navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
+            }
+            else {
                 Toast.makeText(context, "Неверно указана почта или пароль", Toast.LENGTH_SHORT).show()
+            }
 
         }
     }

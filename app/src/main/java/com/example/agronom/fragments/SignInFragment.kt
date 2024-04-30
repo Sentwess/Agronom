@@ -50,7 +50,7 @@ class SignInFragment : Fragment() {
     private fun loginUser(email: String, pass: String) {
         mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
             if (it.isSuccessful)
-                navController.navigate(SignInFragmentDirections.actionSignInFragmentToMainFragment())
+                navController.navigate(SignInFragmentDirections.actionSignInFragmentToSowingFragment())
             else
                 Toast.makeText(context, "Неверно указана почта или пароль", Toast.LENGTH_SHORT).show()
 

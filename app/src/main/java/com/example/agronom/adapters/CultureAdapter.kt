@@ -40,7 +40,7 @@ class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerVi
         holder.cultureName.text = currentItem.cultureName
         holder.varienty.text = currentItem.varienty
         holder.boardingMonth.text = currentItem.boardingMonth
-        holder.growingSeason.text = currentItem.growingSeason
+        holder.imageView.minimumWidth = holder.imageView.height
         Glide.with(holder.itemView.context).load(currentItem.imagePath).into(holder.imageView)
     }
 
@@ -48,7 +48,6 @@ class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerVi
         val cultureName : TextView = itemView.findViewById(R.id.tvName)
         val varienty : TextView = itemView.findViewById(R.id.tvVarienty)
         val boardingMonth : TextView = itemView.findViewById(R.id.tvboardingMonth)
-        val growingSeason : TextView = itemView.findViewById(R.id.tvgrowingSeason)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
 
         init {

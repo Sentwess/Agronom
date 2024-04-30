@@ -6,18 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".fragments.SowingsFragment">
 
-    <ImageButton
-        android:id="@+id/addBtn"
-        android:translationZ="1dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/add"
-        android:scaleType="fitXY"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="30dp"
+        app:cardCornerRadius="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/addBtn"
+            android:translationZ="1dp"
+            android:background="@color/focused"
+            android:src="@drawable/plus_icon"
+            android:padding="15dp"
+            android:scaleType="centerCrop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sowingsList"

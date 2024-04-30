@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -36,11 +37,14 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = sowingsList[position]
-        holder.culture.text = currentItem.culture?.get("cultureName") + "(${currentItem.culture?.get("varienty")})"
+        holder.culture.text = currentItem.culture?.get("cultureName")
+        holder.imageView.minimumWidth = holder.imageView.height
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
-        holder.count.text = currentItem.count.toString() + " т."
         holder.date.text = currentItem.date
+        if(currentItem.status == false) {
+            holder.sowingLayout.setBackgroundResource(R.color.light_gray)
+        }
         if(currentItem.status!!){
             holder.status.text = "Засеян"
         }
@@ -52,10 +56,10 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
     class MyViewHolder(itemView : View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
         val culture : TextView = itemView.findViewById(R.id.tvCulture)
         val field : TextView = itemView.findViewById(R.id.tvField)
-        val count : TextView = itemView.findViewById(R.id.tvCount)
         val date : TextView = itemView.findViewById(R.id.tvDate)
         val status : TextView = itemView.findViewById(R.id.tvStatus)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
+        val sowingLayout : LinearLayout = itemView.findViewById(R.id.sowingLayout)
 
         init {
             itemView.setOnClickListener{

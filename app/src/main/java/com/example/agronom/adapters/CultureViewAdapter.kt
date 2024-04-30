@@ -57,12 +57,13 @@ class CultureViewAdapter(private val context: Context, private var crops: Map<St
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
         val cropInfo = crops
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.culture_item, null)
+        val view = inflater.inflate(R.layout.culture_view_item, null)
         val imageView = view.findViewById<ImageView>(R.id.imageView)
         val tvName = view.findViewById<TextView>(R.id.tvName)
         val tvVarienty = view.findViewById<TextView>(R.id.tvVarienty)
         val tvboardingMonth = view.findViewById<TextView>(R.id.tvboardingMonth)
         val tvgrowingSeason = view.findViewById<TextView>(R.id.tvgrowingSeason)
+        imageView.minimumWidth = imageView.height
         Glide.with(context).load(crops["imagePath"]).into(imageView)
         tvName.text = cropInfo["cultureName"].toString()
         tvVarienty.text = cropInfo["varienty"].toString()

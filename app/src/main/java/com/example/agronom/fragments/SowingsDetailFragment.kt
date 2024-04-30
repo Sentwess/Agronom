@@ -509,7 +509,16 @@ class SowingsDetailFragment : Fragment() {
                     )
                     db.collection("Harvests").document(UUID.randomUUID().toString()).set(harvest)
                         .addOnSuccessListener {
+                            val field = mapOf(
+                                "status" to false,
+                            )
+                            db.collection("Fields").document(sowingData.field!!["docId"]!!).update(field)
+                                .addOnSuccessListener {
 
+                                }
+                                .addOnFailureListener {
+
+                                }
                         }
                         .addOnFailureListener {
 
@@ -519,7 +528,16 @@ class SowingsDetailFragment : Fragment() {
                 sowingData.docId = UUID.randomUUID().toString()
                 db.collection("Sowings").document(sowingData.docId!!).set(updates)
                     .addOnSuccessListener {
+                        val field = mapOf(
+                            "status" to true,
+                        )
+                        db.collection("Fields").document(sowingData.field!!["docId"]!!).update(field)
+                            .addOnSuccessListener {
 
+                            }
+                            .addOnFailureListener {
+
+                            }
                     }
                     .addOnFailureListener {
 

@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
 
         val toolBar = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
         val appBarConfiguration = AppBarConfiguration(setOf(
-            R.id.mainFragment,
             R.id.culturesFragment,
             R.id.fieldsFragment,
             R.id.sowingsFragment,

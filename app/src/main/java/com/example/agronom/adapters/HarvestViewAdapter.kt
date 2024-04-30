@@ -10,7 +10,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.agronom.R
 
-class HarvestViewAdapter(private val context: Context, private var crops: Map<String,String>) : BaseExpandableListAdapter() {
+class HarvestViewAdapter(private val context: Context, private var harvest: Map<String,String>) : BaseExpandableListAdapter() {
 
     override fun getGroupCount(): Int {
         return 1
@@ -41,7 +41,7 @@ class HarvestViewAdapter(private val context: Context, private var crops: Map<St
     }
 
     fun updateInfo(cropInfo: Map<String, String>) {
-        crops = cropInfo
+        harvest = cropInfo
         notifyDataSetChanged()
     }
 
@@ -55,19 +55,20 @@ class HarvestViewAdapter(private val context: Context, private var crops: Map<St
 
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
         val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val view = inflater.inflate(R.layout.harvest_item, null)
+        val view = inflater.inflate(R.layout.harvest_view_item, null)
         val imageView = view.findViewById<ImageView>(R.id.imageView)
         val tvCulture = view.findViewById<TextView>(R.id.tvCulture)
         val tvcultureVarienty = view.findViewById<TextView>(R.id.tvcultureVarienty)
         val tvField = view.findViewById<TextView>(R.id.tvField)
         val tvCount = view.findViewById<TextView>(R.id.tvCount)
         val tvDate = view.findViewById<TextView>(R.id.tvDate)
-        Glide.with(context).load(crops["imagePath"]).into(imageView)
-        tvCulture.text = crops["culture"].toString()
-        tvcultureVarienty.text = crops["varienty"].toString()
-        tvField.text = crops["field"].toString()
-        tvCount.text = crops["count"].toString()
-        tvDate.text = crops["date"].toString()
+        imageView.minimumWidth = imageView.height
+        Glide.with(context).load(harvest["imagePath"]).into(imageView)
+        tvCulture.text = harvest["culture"].toString()
+        tvcultureVarienty.text = harvest["varienty"].toString()
+        tvField.text = harvest["field"].toString()
+        tvCount.text = harvest["count"].toString()
+        tvDate.text = harvest["date"].toString()
         return view
     }
 

@@ -9,20 +9,7 @@
         android:id="@+id/mainFragment"
         android:name="com.example.agronom.fragments.MainFragment"
         android:label="Главная"
-        tools:layout="@layout/fragment_main">
-        <action
-            android:id="@+id/action_mainFragment_to_culturesFragment"
-            app:destination="@id/culturesFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_fieldsFragment"
-            app:destination="@id/fieldsFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_harvestFragment"
-            app:destination="@id/harvestFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_sowingsFragment"
-            app:destination="@id/sowingsFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_main"/>
     <fragment
         android:id="@+id/culturesFragment"
         android:name="com.example.agronom.fragments.CulturesFragment"
@@ -80,8 +67,8 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_splashFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
+            android:id="@+id/action_splashFragment_to_sowingFragment"
+            app:destination="@id/sowingsFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
@@ -103,8 +90,8 @@
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
         <action
-            android:id="@+id/action_signUpFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
+            android:id="@+id/action_signUpFragment_to_sowingFragment"
+            app:destination="@id/sowingsFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"
@@ -126,8 +113,8 @@
             app:popEnterAnim="@anim/from_left"
             app:popExitAnim="@anim/to_right" />
         <action
-            android:id="@+id/action_signInFragment_to_mainFragment"
-            app:destination="@id/mainFragment"
+            android:id="@+id/action_signInFragment_to_sowingFragment"
+            app:destination="@id/sowingsFragment"
             app:enterAnim="@anim/from_right"
             app:exitAnim="@anim/to_left"
             app:launchSingleTop="true"

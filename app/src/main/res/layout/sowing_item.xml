@@ -4,11 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="16dp"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="4dp">
 
     <LinearLayout
+        android:id="@+id/sowingLayout"
+        android:background="#fafafa"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
@@ -16,9 +18,9 @@
         <androidx.cardview.widget.CardView
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            app:cardCornerRadius="8dp"
-            android:elevation="0dp"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="16dp">
 
             <ImageView
                 android:id="@+id/imageView"
@@ -57,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:text="TextView"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -90,35 +92,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView3"
-                    android:fontFamily="@font/poppins_regular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Количество: "
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tvCount"
-                    android:fontFamily="@font/poppins_light"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TextView"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
                     android:id="@+id/textView2"
                     android:fontFamily="@font/poppins_regular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Дата: "
+                    android:text="Дата посева: "
                     android:textSize="16sp" />
 
                 <TextView
