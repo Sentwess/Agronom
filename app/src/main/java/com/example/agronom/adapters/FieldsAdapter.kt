@@ -1,8 +1,10 @@
 package com.example.agronom.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
@@ -35,12 +37,14 @@ class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.A
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = fieldsList[position]
         holder.name.text = currentItem.name
-        holder.size.text = currentItem.size
+        holder.size.text = currentItem.size + " Га"
         if(currentItem.status!!){
             holder.status.text = "Засеяно"
+            holder.status.setTextColor(Color.parseColor("#a2a2a2"))
         }
         else{
             holder.status.text = "Свободно"
+            holder.status.setTextColor(Color.parseColor("#FF000000"))
         }
     }
 
@@ -48,6 +52,7 @@ class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.A
         val name : TextView = itemView.findViewById(R.id.tvName)
         val size : TextView = itemView.findViewById(R.id.tvSize)
         val status : TextView = itemView.findViewById(R.id.tvStatus)
+        val imageView : ImageView = itemView.findViewById(R.id.imageView)
 
         init {
             itemView.setOnClickListener{

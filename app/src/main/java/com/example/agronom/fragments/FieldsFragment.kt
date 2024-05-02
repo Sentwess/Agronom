@@ -9,18 +9,20 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
 import com.example.agronom.adapters.FieldsAdapter
@@ -42,7 +44,10 @@ class FieldsFragment : Fragment() {
     private lateinit var fieldsAdapter: FieldsAdapter
     private lateinit var fieldsArrayList: ArrayList<Fields>
     private lateinit var addBtn: ImageButton
-
+    private lateinit var tvNoItems : TextView
+    private lateinit var svStatus : AutoCompleteTextView
+    private lateinit var sortLayout : LinearLayout
+    var isSortMode = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,10 +59,21 @@ class FieldsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sortLayout = view.findViewById(R.id.sortLayout)
         fieldsRecyclerView = view.findViewById(R.id.fieldsList)
         addBtn = view.findViewById(R.id.addBtn)
+        tvNoItems = view.findViewById(R.id.tvNoItems)
+        svStatus = view.findViewById(R.id.svStatus)
+        val status = ArrayList<String>()
+        status.add("Все поля");
+        status.add("Свободно");
+        status.add("Засеяно")
+        val adapter = ArrayAdapter(requireContext(), R.layout.spinner_item, status)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svStatus.setAdapter(adapter)
+        svStatus.setText("Все поля", false)
 
-        fieldsRecyclerView.layoutManager = LinearLayoutManager(context)
+        fieldsRecyclerView.layoutManager = GridLayoutManager(context, 2)
         fieldsRecyclerView.setHasFixedSize(true)
 
         fieldsArrayList = arrayListOf<Fields>()
@@ -275,6 +291,9 @@ class FieldsFragment : Fragment() {
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
                 val searchView: SearchView = searchItem.actionView as SearchView
+                svStatus.setOnItemClickListener { parent, view, position, id ->
+                    filteredList(searchView.query.toString())
+                }
 
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -290,6 +309,19 @@ class FieldsFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                val id = menuItem.itemId
+                if (id == R.id.sortBtn) {
+                    isSortMode = !isSortMode
+                    if (isSortMode) {
+                        sortLayout.isVisible = true
+                        menuItem.setIcon(R.drawable.settings_sliders_clicked)
+                    } else {
+                        sortLayout.isVisible = false
+                        menuItem.setIcon(R.drawable.settings_sliders)
+                        svStatus.setText("Все поля",false)
+                        filteredList("")
+                    }
+                }
                 return true
             }
         }, viewLifecycleOwner)
@@ -310,39 +342,43 @@ class FieldsFragment : Fragment() {
                     }
                 }
                 fieldsAdapter.notifyDataSetChanged()
+                noItems()
             }
         })
     }
 
     fun filteredList(query: String?) {
+        var filteredList = ArrayList<Fields>()
         if (query != null) {
-            val filteredList = ArrayList<Fields>()
             for (i in fieldsArrayList) {
-                if (i.name?.lowercase(Locale.ROOT)!!
-                        .contains(query.lowercase()) || i.size?.lowercase(Locale.ROOT)!!
-                        .contains(query.lowercase())
+                if (i.name?.lowercase(Locale.ROOT)!!.contains(query.lowercase())
+                    || i.size?.lowercase(Locale.ROOT)!!.contains(query.lowercase())
                 ) {
                     filteredList.add(i)
                 }
             }
+        }
 
-            /*
-            if(spinnerView.selectedItemPosition == 0){
-                filteredList.sortBy { t -> t.docId }
-            }
-            if(spinnerView.selectedItemPosition == 1){
-                filteredList.sortByDescending { t -> t.name }
-            }
-            if(spinnerView.selectedItemPosition == 2){
-                filteredList.sortBy { t -> t.name }
-            }
-            */
+        if(svStatus.text.contains("Свободно")){
+            filteredList = filteredList.filter { t -> !t.status!! } as ArrayList<Fields>
+        }
+        if(svStatus.text.contains("Засеяно")){
+            filteredList = filteredList.filter { t -> t.status!! } as ArrayList<Fields>
+        }
 
-            if (filteredList.isEmpty()) {
-                filteredList.clear()
-                Toast.makeText(context, "Не найдено", Toast.LENGTH_SHORT).show()
-            }
-            fieldsAdapter.setFilteredList(filteredList)
+        if (filteredList.isEmpty()) {
+            filteredList.clear()
+        }
+        fieldsAdapter.setFilteredList(filteredList)
+        noItems()
+    }
+
+    private fun noItems(){
+        if(fieldsAdapter.itemCount == 0){
+            tvNoItems.text = "Нет записей"
+        }
+        else{
+            tvNoItems.text = ""
         }
     }
 }

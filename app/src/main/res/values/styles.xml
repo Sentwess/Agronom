@@ -37,8 +37,28 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="SelectTextStyle" parent="android:Widget.EditText">
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <item name="android:padding">4dp</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="ToggleButtonGroupStyle" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="backgroundTint">@color/button_toggle_bg</item>
+    </style>
+
+    <style name="MyCardView" parent="@style/Widget.MaterialComponents.CardView">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.MaterialCardView.Cut</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MaterialCardView.Cut" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
 </resources>

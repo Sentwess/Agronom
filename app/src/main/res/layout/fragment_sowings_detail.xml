@@ -49,6 +49,7 @@
                 <AutoCompleteTextView
                     android:id="@+id/svField"
                     android:inputType="none"
+                    android:dropDownAnchor="@id/svField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/mText"
@@ -97,6 +98,7 @@
                     <AutoCompleteTextView
                         android:id="@+id/svCulture"
                         android:inputType="none"
+                        android:dropDownAnchor="@id/svCulture"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mText"
@@ -135,6 +137,7 @@
                     <AutoCompleteTextView
                         android:id="@+id/svVarienty"
                         android:inputType="none"
+                        android:dropDownAnchor="@id/svVarienty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mText"
@@ -168,7 +171,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Количество"
+                    android:text="Количество, т"
                     android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/focused"
                     android:textSize="20sp" />
@@ -261,7 +264,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Кол-во урожая"
+                    android:text="Урожай, т"
                     android:fontFamily="@font/poppins_semibold"
                     android:textColor="@color/focused"
                     android:textSize="20sp" />
@@ -281,7 +284,7 @@
                         android:id="@+id/tvCountHarvest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/focused"
+                        android:textColor="@color/mText"
                         android:hint="52"
                         android:theme="@style/EditTextStyle"/>
 

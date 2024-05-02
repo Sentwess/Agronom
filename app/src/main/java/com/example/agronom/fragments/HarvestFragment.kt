@@ -9,13 +9,14 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.GridLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -38,6 +39,13 @@ class HarvestFragment : Fragment() {
     private lateinit var  harvestRecyclerView : RecyclerView
     private lateinit var harvestAdapter : HarvestAdapter
     private lateinit var  harvestArrayList : ArrayList<Harvest>
+    private lateinit var tvNoItems : TextView
+    private lateinit var svCulture : AutoCompleteTextView
+    private lateinit var svField : AutoCompleteTextView
+    private lateinit var svDate : AutoCompleteTextView
+    private lateinit var svCount : AutoCompleteTextView
+    private lateinit var sortLayout : LinearLayout
+    var isSortMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +65,15 @@ class HarvestFragment : Fragment() {
         harvestRecyclerView.layoutManager = LinearLayoutManager(context)
         harvestRecyclerView.setHasFixedSize(true)
 
+        sortLayout = view.findViewById(R.id.sortLayout)
+
+        svCulture = view.findViewById(R.id.svCulture)
+        svField = view.findViewById(R.id.svField)
+        svDate = view.findViewById(R.id.svDate)
+        svCount = view.findViewById(R.id.svCount)
+
+        tvNoItems = view.findViewById(R.id.tvNoItems)
+
         harvestArrayList = arrayListOf<Harvest>()
         harvestAdapter = HarvestAdapter(harvestArrayList)
         harvestRecyclerView.adapter = harvestAdapter
@@ -72,6 +89,54 @@ class HarvestFragment : Fragment() {
         })
     }
 
+    private fun loadSortLayout(){
+        val cultureNamesList: MutableList<String?> = ArrayList()
+        cultureNamesList.add("Все культуры")
+        for (harvest in harvestArrayList) {
+            val cultureName = harvest.culture?.get("cultureName")
+            if (!cultureNamesList.contains(cultureName)) {
+                cultureNamesList.add(cultureName);
+            }
+        }
+        val adapterC = ArrayAdapter(requireContext(), R.layout.spinner_item, cultureNamesList)
+        adapterC.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svCulture.setAdapter(adapterC)
+        svCulture.setText("Все культуры", false)
+
+        val fieldNamesList: MutableList<String?> = ArrayList()
+        fieldNamesList.add("Все поля")
+        for (harvest in harvestArrayList) {
+            val fieldName = harvest.field?.get("name")
+            if (!fieldNamesList.contains(fieldName)) {
+                fieldNamesList.add(fieldName);
+            }
+        }
+        val adapterF = ArrayAdapter(requireContext(), R.layout.spinner_item, fieldNamesList)
+        adapterF.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svField.setAdapter(adapterF)
+        svField.setText("Все поля", false)
+
+
+        val yearList: MutableList<String?> = ArrayList()
+        yearList.add("Все года")
+        for (document in harvestArrayList) {
+            val date = document.date
+            val year = date?.substring(date.length - 4)
+            if (!yearList.contains(year)) {
+                yearList.add(year);
+            }
+        }
+        val adapterD = ArrayAdapter(requireContext(), R.layout.spinner_item, yearList)
+        adapterD.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svDate.setAdapter(adapterD)
+        svDate.setText("Все года", false)
+
+        val adapter = ArrayAdapter.createFromResource(requireContext(), R.array.count, R.layout.spinner_item)
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
+        svCount.setAdapter(adapter)
+        svCount.setText("Без фильтра", false)
+    }
+
     private fun showMenuButtons(){
         val menuHost: MenuHost = requireActivity()
         menuHost.addMenuProvider(object : MenuProvider {
@@ -80,6 +145,18 @@ class HarvestFragment : Fragment() {
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
                 val searchView: SearchView = searchItem.actionView as SearchView
+                svCulture.setOnItemClickListener { parent, view, position, id ->
+                    filteredList(searchView.query.toString())
+                }
+                svField.setOnItemClickListener { parent, view, position, id ->
+                    filteredList(searchView.query.toString())
+                }
+                svDate.setOnItemClickListener { parent, view, position, id ->
+                    filteredList(searchView.query.toString())
+                }
+                svCount.setOnItemClickListener { parent, view, position, id ->
+                    filteredList(searchView.query.toString())
+                }
 
                 searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
@@ -95,6 +172,22 @@ class HarvestFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                val id = menuItem.itemId
+                if (id == R.id.sortBtn) {
+                    isSortMode = !isSortMode
+                    if (isSortMode) {
+                        sortLayout.isVisible = true
+                        menuItem.setIcon(R.drawable.settings_sliders_clicked)
+                    } else {
+                        sortLayout.isVisible = false
+                        menuItem.setIcon(R.drawable.settings_sliders)
+                        svCulture.setText("Все культуры",false)
+                        svField.setText("Все поля",false)
+                        svDate.setText("Все года",false)
+                        svCount.setText("Без фильтра",false)
+                        filteredList("")
+                    }
+                }
                 return true
             }
         }, viewLifecycleOwner)
@@ -114,37 +207,54 @@ class HarvestFragment : Fragment() {
                 }
             }
             harvestAdapter.notifyDataSetChanged()
+            noItems()
+            loadSortLayout()
         }
     }
 
     fun filteredList(query: String?){
+        var filteredList = ArrayList<Harvest>()
         if(query != null){
-            val filteredList = ArrayList<Harvest>()
             for(i in harvestArrayList){
                 if(i.culture?.get("cultureName")?.lowercase(Locale.ROOT)!!.contains(query.lowercase())
-                    || i.field?.get("name")?.lowercase(Locale.ROOT)!!.contains(query.lowercase()))
+                    || i.field?.get("name")?.lowercase(Locale.ROOT)!!.contains(query.lowercase())
+                    || i.count?.toString()?.lowercase(Locale.ROOT)!!.contains(query.lowercase())
+                    || i.date?.lowercase(Locale.ROOT)!!.contains(query.lowercase()))
                 {
                     filteredList.add(i)
                 }
             }
+        }
 
-            /*
-            if(spinnerView.selectedItemPosition == 0){
-                filteredList.sortBy { t -> t.docId }
-            }
-            if(spinnerView.selectedItemPosition == 1){
-                filteredList.sortByDescending { t -> t.name }
-            }
-            if(spinnerView.selectedItemPosition == 2){
-                filteredList.sortBy { t -> t.name }
-            }
-            */
+        if(!svCulture.text.contains("Все культуры")){
+            filteredList = filteredList.filter { t -> t.culture?.get("cultureName")!!.contains(svCulture.text) } as ArrayList<Harvest>
+        }
+        if(!svField.text.contains("Все поля")){
+            filteredList = filteredList.filter { t -> t.field?.get("name")!!.contains(svField.text) } as ArrayList<Harvest>
+        }
+        if(!svDate.text.contains("Все года")){
+            filteredList = filteredList.filter { t -> t.date!!.substring(t.date!!.length - 4).contains(svDate.text) } as ArrayList<Harvest>
+        }
+        if(svCount.text.contains("По возрастанию")){
+            filteredList.sortBy { t -> t.count }
+        }
+        if(svCount.text.contains("По убыванию")){
+            filteredList.sortByDescending { t -> t.count }
+        }
 
-            if(filteredList.isEmpty()){
-                filteredList.clear()
-                Toast.makeText(context,"Не найдено", Toast.LENGTH_SHORT).show()
-            }
-            harvestAdapter.setFilteredList(filteredList)
+        if(filteredList.isEmpty()){
+            filteredList.clear()
+        }
+        harvestAdapter.setFilteredList(filteredList)
+        noItems()
+    }
+
+    private fun noItems(){
+        if(harvestAdapter.itemCount == 0){
+            tvNoItems.text = "Нет записей"
+        }
+        else{
+            tvNoItems.text = ""
         }
     }
 

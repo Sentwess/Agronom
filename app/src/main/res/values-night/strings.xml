@@ -10,14 +10,25 @@
     <string-array name="sort">
         <item>Без</item>
         <item>По убыванию</item>
-        <item>По возростанию</item>
+        <item>По возрастанию</item>
     </string-array>
     <string-array name="status">
         <item>Свободно</item>
         <item>Засеяно</item>
     </string-array>
+    <string-array name="fieldStatus">
+        <item>Все поля</item>
+        <item>Свободно</item>
+        <item>Засеяно</item>
+    </string-array>
     <string-array name="sowingStatus">
+        <item>Все записи</item>
         <item>Засеян</item>
         <item>Завершён</item>
+    </string-array>
+    <string-array name="count">
+        <item>Без фильтра</item>
+        <item>По возрастанию</item>
+        <item>По убыванию</item>
     </string-array>
 </resources>

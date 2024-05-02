@@ -35,6 +35,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import java.util.Calendar
 import java.util.UUID
 
@@ -279,14 +280,15 @@ class SowingsDetailFragment : Fragment() {
         val selectedItemField = fieldItems.indexOfFirst { it.fieldName.compareTo(svField.text.toString()) == 0}
         if(!svField.text.isNullOrEmpty() && selectedItemField > -1) {
             val docIdField = fieldItems[selectedItemField].docId
-            var lastDocument: DocumentSnapshot? = null // Переменная для хранения последнего документа
+
+            var lastDocument: DocumentSnapshot? = null
             db.collection("Harvests")
                 .whereEqualTo("field.docId", docIdField)
+                .orderBy("date", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result) {
-                            // Сохраняем последний документ в переменной lastDocument
                             lastDocument = document
                         }
                         harvestView = mapOf(
@@ -297,18 +299,14 @@ class SowingsDetailFragment : Fragment() {
                             "count" to lastDocument?.get("count").toString(),
                             "date" to lastDocument?.get("date").toString()
                         )
-                        if(harvestView["culture"]?.contains("null") != true) {
+                        if (harvestView["date"]?.contains("null") != true) {
                             expListViewHarvest.isVisible = true
                             harvestAdapter.updateInfo(harvestView)
-                        }
-                        else{
+                        } else {
                             expListViewHarvest.isVisible = false
                         }
                     }
                 }
-        }
-        else{
-            expListViewHarvest.isVisible = false
         }
     }
 
@@ -358,20 +356,37 @@ class SowingsDetailFragment : Fragment() {
     }
 
     private fun loadCultureView(){
-        if(!svVarienty.text.isNullOrEmpty()) {
-            expListViewCulture.isVisible = true
-            val selectedItemCulture = varientyItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0 }
-            cultureView = mapOf(
-                "cultureName" to varientyItems[selectedItemCulture].cultureName,
-                "varienty" to varientyItems[selectedItemCulture].varienty,
-                "boardingMonth" to varientyItems[selectedItemCulture].boardingMonth,
-                "growingSeason" to varientyItems[selectedItemCulture].growingSeason,
-                "imagePath" to varientyItems[selectedItemCulture].imagePath,
-            )
-            cultureAdapter.updateCropInfo(cultureView)
+        try {
+            if (!svVarienty.text.isNullOrEmpty()) {
+                expListViewCulture.isVisible = true
+                val selectedItemCulture =
+                    varientyItems.indexOfFirst { it.varienty.compareTo(svVarienty.text.toString()) == 0 }
+                cultureView = mapOf(
+                    "cultureName" to varientyItems[selectedItemCulture].cultureName,
+                    "varienty" to varientyItems[selectedItemCulture].varienty,
+                    "boardingMonth" to varientyItems[selectedItemCulture].boardingMonth,
+                    "growingSeason" to varientyItems[selectedItemCulture].growingSeason,
+                    "imagePath" to varientyItems[selectedItemCulture].imagePath,
+                )
+                cultureAdapter.updateCropInfo(cultureView)
+            } else {
+                expListViewCulture.isVisible = false
+            }
         }
-        else{
-            expListViewCulture.isVisible = false
+        catch(e: Exception){
+            if (!svVarienty.text.isNullOrEmpty()) {
+                expListViewCulture.isVisible = true
+                cultureView = mapOf(
+                    "cultureName" to sowingData.culture?.get("cultureName").toString(),
+                    "varienty" to sowingData.culture?.get("varienty").toString(),
+                    "boardingMonth" to sowingData.culture?.get("boardingMonth").toString(),
+                    "growingSeason" to sowingData.culture?.get("growingSeason").toString(),
+                    "imagePath" to sowingData.culture?.get("imagePath").toString(),
+                )
+                cultureAdapter.updateCropInfo(cultureView)
+            } else {
+                expListViewCulture.isVisible = false
+            }
         }
     }
 
@@ -569,6 +584,7 @@ class SowingsDetailFragment : Fragment() {
             changeInputType(false)
             saveBtn.isVisible = false
             if(isEditMode){
+                showHarvest()
                 isEditMode = false
             }
             if(newSowing){

@@ -10,4 +10,11 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="Поиск"/>
+
+    <item
+        android:id="@+id/sortBtn"
+        android:icon="@drawable/settings_sliders"
+        android:background="?android:attr/selectableItemBackground"
+        app:showAsAction="always"
+        android:title="Поиск"/>
 </menu>

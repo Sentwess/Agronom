@@ -39,15 +39,12 @@ class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerVi
         val currentItem = cultureList[position]
         holder.cultureName.text = currentItem.cultureName
         holder.varienty.text = currentItem.varienty
-        holder.boardingMonth.text = currentItem.boardingMonth
-        holder.imageView.minimumWidth = holder.imageView.height
         Glide.with(holder.itemView.context).load(currentItem.imagePath).into(holder.imageView)
     }
 
     class MyViewHolder(itemView : View,listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
         val cultureName : TextView = itemView.findViewById(R.id.tvName)
         val varienty : TextView = itemView.findViewById(R.id.tvVarienty)
-        val boardingMonth : TextView = itemView.findViewById(R.id.tvboardingMonth)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
 
         init {

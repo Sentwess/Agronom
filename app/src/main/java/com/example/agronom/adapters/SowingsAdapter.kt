@@ -1,10 +1,11 @@
 package com.example.agronom.adapters
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -42,14 +43,14 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
         holder.date.text = currentItem.date
-        if(currentItem.status == false) {
-            holder.sowingLayout.setBackgroundResource(R.color.light_gray)
-        }
         if(currentItem.status!!){
             holder.status.text = "Засеян"
+            holder.sowingLayout.setBackgroundResource(android.R.color.transparent)
         }
         else{
             holder.status.text = "Завершён"
+            holder.sowingLayout.setBackgroundResource(R.color.light_gray)
+            holder.status.setTextColor(Color.parseColor("#a2a2a2"))
         }
     }
 
@@ -59,7 +60,7 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
         val date : TextView = itemView.findViewById(R.id.tvDate)
         val status : TextView = itemView.findViewById(R.id.tvStatus)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
-        val sowingLayout : LinearLayout = itemView.findViewById(R.id.sowingLayout)
+        val sowingLayout : GridLayout = itemView.findViewById(R.id.sowingLayout)
 
         init {
             itemView.setOnClickListener{

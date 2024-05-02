@@ -358,7 +358,6 @@ class CultureDetailFragment : Fragment() {
 
     private fun showData(save : Boolean){
         if(save){
-            loadData()
             changeInputType(false)
             buttonsClickable(false)
             if(isEditMode){

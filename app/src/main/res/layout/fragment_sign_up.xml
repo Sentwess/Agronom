@@ -13,9 +13,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins_semibold"
-        android:textColor="@color/blue"
+        android:textColor="@color/focused"
         android:text="Регистрация"
-        android:textSize="30sp"
+        android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,7 +23,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="70dp"
         android:layout_weight="1"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,7 +49,7 @@
                 android:textColor="@color/mText"
                 android:paddingStart="20dp"
                 android:inputType="textEmailAddress"
-                android:hint="Введите почту"
+                android:hint="Email"
                 android:theme="@style/EditTextStyle"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -71,7 +71,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mText"
-                android:hint="Введите пароль"
+                android:hint="Пароль"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
                 android:theme="@style/EditTextStyle"/>
@@ -95,7 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mText"
-                android:hint="Введите повторно пароль"
+                android:hint="Повторите пароль"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
                 android:theme="@style/EditTextStyle"/>
@@ -122,7 +122,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Уже зарегистрированы?"
-        android:textColor="@color/mText"
         android:textSize="16sp"
         android:fontFamily="@font/poppins_semibold"
         app:layout_constraintEnd_toStartOf="@+id/textViewSignIn"
@@ -135,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=" Войти"
-        android:textColor="@color/blue"
+        android:textColor="@color/focused"
         android:textSize="16sp"
         android:fontFamily="@font/poppins_semibold"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
