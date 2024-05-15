@@ -238,11 +238,19 @@ class SowingsDetailFragment : Fragment() {
 
         DatePickerDialog(requireView().context,
             { _, selectedYear, selectedMonth, dayOfMonth ->
+                var day: String = dayOfMonth.toString()
+                var month: String = selectedMonth.toString()
+                if(dayOfMonth < 10){
+                    day = "0${dayOfMonth}"
+                }
+                if(selectedMonth < 10){
+                    month = "0${selectedMonth + 1}"
+                }
                 if(startDate) {
-                    tvDateStart.setText("${dayOfMonth}.${selectedMonth + 1}.$selectedYear")
+                    tvDateStart.setText("${day}.${month}.$selectedYear")
                 }
                 else{
-                    tvDateEnd.setText("${dayOfMonth}.${selectedMonth + 1}.$selectedYear")
+                    tvDateEnd.setText("${day}.${month}.$selectedYear")
                 }
             }, year, month, day
         ).show()
@@ -278,7 +286,7 @@ class SowingsDetailFragment : Fragment() {
 
     private fun loadHarvestView(){
         val selectedItemField = fieldItems.indexOfFirst { it.fieldName.compareTo(svField.text.toString()) == 0}
-        if(!svField.text.isNullOrEmpty() && selectedItemField > -1) {
+        if(!svField.text.isNullOrBlank() && selectedItemField > -1) {
             val docIdField = fieldItems[selectedItemField].docId
 
             var lastDocument: DocumentSnapshot? = null
@@ -307,6 +315,9 @@ class SowingsDetailFragment : Fragment() {
                         }
                     }
                 }
+        }
+        else{
+            expListViewHarvest.isVisible = false
         }
     }
 

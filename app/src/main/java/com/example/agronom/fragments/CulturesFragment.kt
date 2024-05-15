@@ -13,6 +13,7 @@ import android.widget.AutoCompleteTextView
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -81,15 +82,8 @@ class CulturesFragment : Fragment() {
         }
 
         cultureAdapter.setOnItemClickListener(object : CultureAdapter.OnItemClickListener{
-            override fun onItemClick(position: Int) {
-                val item = cultureArrayList[position]
-                val culture = Cultures(item.docId.toString(),
-                    item.cultureName.toString(),
-                    item.varienty.toString(),
-                    item.boardingMonth.toString(),
-                    item.growingSeason.toString(),
-                    item.imagePath.toString())
-                val action = CulturesFragmentDirections.actionCulturesFragmentToCultureDetailFragment(culture)
+            override fun onItemClick(item: Cultures) {
+                val action = CulturesFragmentDirections.actionCulturesFragmentToCultureDetailFragment(item)
                 findNavController().navigate(action)
             }
 
@@ -119,17 +113,18 @@ class CulturesFragment : Fragment() {
 
     private fun showMenuButtons(){
         val menuHost: MenuHost = requireActivity()
+        var searchView: SearchView? = null
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
-                val searchView: androidx.appcompat.widget.SearchView = searchItem.actionView as androidx.appcompat.widget.SearchView
+                searchView = searchItem.actionView as SearchView
                 svCulture.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView!!.query.toString())
                 }
 
-                searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
                     }
@@ -153,7 +148,7 @@ class CulturesFragment : Fragment() {
                         sortLayout.isVisible = false
                         menuItem.setIcon(R.drawable.settings_sliders)
                         svCulture.setText("Все культуры",false)
-                        filteredList("")
+                        filteredList(searchView?.query.toString())
                     }
                 }
                 return true

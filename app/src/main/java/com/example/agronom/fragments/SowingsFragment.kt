@@ -28,7 +28,6 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import java.util.Locale
 
@@ -89,15 +88,8 @@ class SowingsFragment : Fragment() {
         }
 
         sowingsAdapter.setOnItemClickListener(object : SowingsAdapter.OnItemClickListener{
-            override fun onItemClick(position: Int) {
-                val item = sowingsArrayList[position]
-                val sowing = Sowings(item.docId,
-                    item.culture,
-                    item.field,
-                    item.count,
-                    item.date,
-                    item.status)
-                val action = SowingsFragmentDirections.actionSowingsFragmentToSowingsDetailFragment(sowing)
+            override fun onItemClick(item: Sowings) {
+                val action = SowingsFragmentDirections.actionSowingsFragmentToSowingsDetailFragment(item)
                 findNavController().navigate(action)
             }
         })
@@ -156,26 +148,27 @@ class SowingsFragment : Fragment() {
 
     private fun showMenuButtons(){
         val menuHost: MenuHost = requireActivity()
+        var searchView: SearchView? = null
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
-                val searchView: SearchView = searchItem.actionView as SearchView
+                searchView = searchItem.actionView as SearchView
                 svCulture.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svField.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svDate.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svStatus.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
 
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
                     }
@@ -202,7 +195,7 @@ class SowingsFragment : Fragment() {
                         svField.setText("Все поля",false)
                         svDate.setText("Все года",false)
                         svStatus.setText("Все записи",false)
-                        filteredList("")
+                        filteredList(searchView?.query.toString())
                     }
                 }
                 return true

@@ -15,21 +15,21 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/tvTitle"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_medium"
             android:text="Чтобы сохранить запись, добавьте информацию о ней:"
-            android:textColor="@color/blue"
-            android:textSize="16sp" />
+            android:textSize="17sp" />
 
         <TextView
             android:id="@+id/tvMessage"
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semibold"
-            android:lineSpacingExtra="10dp"
-            android:maxLines="6"
-            android:textColor="@color/mText"
+            android:fontFamily="@font/poppins_regular"
+            android:lineSpacingExtra="8dp"
+            android:maxLines="8"
             android:textSize="16sp" />
 
         <Button

@@ -11,18 +11,19 @@ import com.example.agronom.R
 import com.example.agronom.data.Harvest
 
 class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerView.Adapter<HarvestAdapter.MyViewHolder>() {
-    private lateinit var mListener: OnItemClickListener
+    private lateinit var listener: OnItemClickListener
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Harvest)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.harvest_item, parent, false)
-        return MyViewHolder(itemView, mListener)
+        return MyViewHolder(itemView)
     }
 
     fun setFilteredList(harvestList: ArrayList<Harvest>){
@@ -36,6 +37,9 @@ class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerVi
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = harvestList[position]
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(currentItem)
+        }
         holder.culture.text = currentItem.culture?.get("cultureName")
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
         holder.field.text = currentItem.field?.get("name")
@@ -43,18 +47,12 @@ class HarvestAdapter (private var harvestList : ArrayList<Harvest>) : RecyclerVi
         holder.date.text = currentItem.date
     }
 
-    class MyViewHolder(itemView : View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val culture : TextView = itemView.findViewById(R.id.tvCulture)
         val field : TextView = itemView.findViewById(R.id.tvField)
         val count : TextView = itemView.findViewById(R.id.tvCount)
         val date : TextView = itemView.findViewById(R.id.tvDate)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
-
-        init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 
 }

@@ -8,14 +8,19 @@
 
     <LinearLayout
         android:visibility="gone"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:id="@+id/sortLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/line"
+        app:layout_constraintBottom_toTopOf="@id/sowingsList"
         app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -129,18 +134,16 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/light_gray"
+            />
     </LinearLayout>
 
-    <View
-        android:id="@+id/line"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/gray"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sortLayout"
-        app:layout_constraintBottom_toTopOf="@id/sowingsList"
-        />
 
     <TextView
         android:id="@+id/tvNoItems"
@@ -180,6 +183,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/line" />
+        app:layout_constraintTop_toBottomOf="@id/sortLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

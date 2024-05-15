@@ -16,5 +16,5 @@
         android:icon="@drawable/settings_sliders"
         android:background="?android:attr/selectableItemBackground"
         app:showAsAction="always"
-        android:title="Поиск"/>
+        android:title="Фильтрация"/>
 </menu>

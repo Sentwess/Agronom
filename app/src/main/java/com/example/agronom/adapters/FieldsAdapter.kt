@@ -11,18 +11,20 @@ import com.example.agronom.R
 import com.example.agronom.data.Fields
 
 class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.Adapter<FieldsAdapter.MyViewHolder>() {
-    private lateinit var mListener:OnItemClickListener
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
+    private lateinit var listener: OnItemClickListener
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Fields)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.field_item, parent, false)
-        return MyViewHolder(itemView, mListener)
+        return MyViewHolder(itemView)
     }
 
     fun setFilteredList(fieldsList: ArrayList<Fields>){
@@ -36,6 +38,9 @@ class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.A
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = fieldsList[position]
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(currentItem)
+        }
         holder.name.text = currentItem.name
         holder.size.text = currentItem.size + " Га"
         if(currentItem.status!!){
@@ -48,17 +53,11 @@ class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.A
         }
     }
 
-    class MyViewHolder(itemView : View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val name : TextView = itemView.findViewById(R.id.tvName)
         val size : TextView = itemView.findViewById(R.id.tvSize)
         val status : TextView = itemView.findViewById(R.id.tvStatus)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
-
-        init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 
 }

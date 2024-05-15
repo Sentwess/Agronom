@@ -93,15 +93,8 @@ class FieldsFragment : Fragment() {
         }
 
         fieldsAdapter.setOnItemClickListener(object : FieldsAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val item = fieldsArrayList[position]
-                val field = Fields(
-                    item.docId.toString(),
-                    item.name.toString(),
-                    item.size.toString(),
-                    item.status
-                )
-                openDialog(field)
+            override fun onItemClick(item: Fields) {
+                openDialog(item)
             }
 
         })
@@ -285,17 +278,18 @@ class FieldsFragment : Fragment() {
 
     private fun showMenuButtons() {
         val menuHost: MenuHost = requireActivity()
+        var searchView: SearchView? = null
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
-                val searchView: SearchView = searchItem.actionView as SearchView
+                searchView = searchItem.actionView as SearchView
                 svStatus.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
 
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
                     }
@@ -319,7 +313,7 @@ class FieldsFragment : Fragment() {
                         sortLayout.isVisible = false
                         menuItem.setIcon(R.drawable.settings_sliders)
                         svStatus.setText("Все поля",false)
-                        filteredList("")
+                        filteredList(searchView?.query.toString())
                     }
                 }
                 return true

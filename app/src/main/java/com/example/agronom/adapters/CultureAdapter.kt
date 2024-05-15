@@ -12,18 +12,19 @@ import com.example.agronom.data.Cultures
 
 class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerView.Adapter<CultureAdapter.MyViewHolder>() {
 
-    private lateinit var mListener:OnItemClickListener
+    private lateinit var listener: OnItemClickListener
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Cultures)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.culture_item, parent, false)
-        return MyViewHolder(itemView, mListener)
+        return MyViewHolder(itemView)
     }
 
     fun setFilteredList(cultureList: ArrayList<Cultures>){
@@ -40,17 +41,14 @@ class CultureAdapter(private var cultureList : ArrayList<Cultures>) : RecyclerVi
         holder.cultureName.text = currentItem.cultureName
         holder.varienty.text = currentItem.varienty
         Glide.with(holder.itemView.context).load(currentItem.imagePath).into(holder.imageView)
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(currentItem)
+        }
     }
 
-    class MyViewHolder(itemView : View,listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val cultureName : TextView = itemView.findViewById(R.id.tvName)
         val varienty : TextView = itemView.findViewById(R.id.tvVarienty)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
-
-        init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 }

@@ -49,7 +49,9 @@
                 <AutoCompleteTextView
                     android:id="@+id/svField"
                     android:inputType="none"
-                    android:dropDownAnchor="@id/svField"
+                    android:dropDownVerticalOffset="-14dp"
+                    android:dropDownHeight="250dp"
+                    android:dropDownAnchor="@id/fieldLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/mText"
@@ -98,7 +100,9 @@
                     <AutoCompleteTextView
                         android:id="@+id/svCulture"
                         android:inputType="none"
-                        android:dropDownAnchor="@id/svCulture"
+                        android:dropDownVerticalOffset="-14dp"
+                        android:dropDownHeight="250dp"
+                        android:dropDownAnchor="@id/cultureLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mText"
@@ -137,7 +141,9 @@
                     <AutoCompleteTextView
                         android:id="@+id/svVarienty"
                         android:inputType="none"
-                        android:dropDownAnchor="@id/svVarienty"
+                        android:dropDownVerticalOffset="-14dp"
+                        android:dropDownAnchor="@id/varientyLayout"
+                        android:dropDownHeight="200dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mText"
@@ -223,6 +229,7 @@
                     app:boxCornerRadiusTopStart="50dp"
                     app:hintEnabled="false"
                     app:endIconMode="custom"
+                    app:endIconMinSize="45dp"
                     app:endIconDrawable="@drawable/calendar_icon"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -231,7 +238,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/mText"
-                        android:hint="10.04.2024"
+                        android:hint="08.04.2024"
                         android:theme="@style/EditTextStyle"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -316,6 +323,7 @@
                     app:boxCornerRadiusTopStart="50dp"
                     app:hintEnabled="false"
                     app:endIconMode="custom"
+                    app:endIconMinSize="45dp"
                     app:endIconDrawable="@drawable/calendar_icon"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 

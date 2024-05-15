@@ -34,6 +34,17 @@
             app:layout_constraintVertical_bias="0.5"
             app:navGraph="@navigation/routes" />
 
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/light_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
+            app:layout_constraintTop_toBottomOf="@id/navFragment"
+            />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_nav_view"
             android:layout_width="match_parent"
@@ -57,7 +68,6 @@
         android:fitsSystemWindows="true"
         app:menu="@menu/drawer_menu"
         >
-
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>

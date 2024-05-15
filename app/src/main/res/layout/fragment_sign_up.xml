@@ -3,11 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="64dp"
-    android:paddingHorizontal="24dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.SignUpFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="64dp"
+            android:paddingHorizontal="24dp">
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -32,9 +39,57 @@
         app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxCornerRadiusBottomEnd="50dp"
+            app:boxCornerRadiusBottomStart="50dp"
+            app:boxCornerRadiusTopEnd="50dp"
+            app:boxCornerRadiusTopStart="50dp"
+            app:hintEnabled="false"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/fioEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/mText"
+                android:paddingStart="20dp"
+                android:inputType="text"
+                android:hint="Фамилия Имя"
+                android:theme="@style/EditTextStyle"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/cardV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:boxCornerRadiusBottomEnd="50dp"
+            app:boxCornerRadiusBottomStart="50dp"
+            app:boxCornerRadiusTopEnd="50dp"
+            app:boxCornerRadiusTopStart="50dp"
+            app:hintEnabled="false"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/mText"
+                android:paddingStart="20dp"
+                android:inputType="phone"
+                android:hint="Телефон"
+                android:theme="@style/EditTextStyle"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/cardView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:boxCornerRadiusBottomEnd="50dp"
             app:boxCornerRadiusBottomStart="50dp"
             app:boxCornerRadiusTopEnd="50dp"
@@ -95,7 +150,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/mText"
-                android:hint="Повторите пароль"
+                android:hint="Пароль повторно"
                 android:inputType="textPassword"
                 android:paddingStart="20dp"
                 android:theme="@style/EditTextStyle"/>
@@ -155,5 +210,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.76" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

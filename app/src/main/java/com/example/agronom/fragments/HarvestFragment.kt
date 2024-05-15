@@ -82,9 +82,8 @@ class HarvestFragment : Fragment() {
         showMenuButtons()
 
         harvestAdapter.setOnItemClickListener(object : HarvestAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                val harvest = harvestArrayList[position]
-                openDialog(harvest)
+            override fun onItemClick(item: Harvest) {
+                openDialog(item)
             }
         })
     }
@@ -139,26 +138,27 @@ class HarvestFragment : Fragment() {
 
     private fun showMenuButtons(){
         val menuHost: MenuHost = requireActivity()
+        var searchView: SearchView? = null
         menuHost.addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menu.clear()
                 menuInflater.inflate(R.menu.search_menu, menu)
                 val searchItem: MenuItem = menu.findItem(R.id.searchBar)
-                val searchView: SearchView = searchItem.actionView as SearchView
+                searchView = searchItem.actionView as SearchView
                 svCulture.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svField.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svDate.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
                 svCount.setOnItemClickListener { parent, view, position, id ->
-                    filteredList(searchView.query.toString())
+                    filteredList(searchView?.query.toString())
                 }
 
-                searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+                searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                     override fun onQueryTextSubmit(query: String?): Boolean {
                         return false
                     }
@@ -185,7 +185,7 @@ class HarvestFragment : Fragment() {
                         svField.setText("Все поля",false)
                         svDate.setText("Все года",false)
                         svCount.setText("Без фильтра",false)
-                        filteredList("")
+                        filteredList(searchView?.query.toString())
                     }
                 }
                 return true

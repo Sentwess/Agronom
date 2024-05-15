@@ -13,18 +13,19 @@ import com.example.agronom.R
 import com.example.agronom.data.Sowings
 
 class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerView.Adapter<SowingsAdapter.MyViewHolder>() {
-    private lateinit var mListener:OnItemClickListener
+    private lateinit var listener: OnItemClickListener
 
-    interface OnItemClickListener{
-        fun onItemClick(position: Int)
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.listener = listener
     }
-    fun setOnItemClickListener(listener: OnItemClickListener){
-        mListener = listener
+
+    interface OnItemClickListener {
+        fun onItemClick(item: Sowings)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.sowing_item, parent, false)
-        return MyViewHolder(itemView, mListener)
+        return MyViewHolder(itemView)
     }
 
     fun setFilteredList(sowingsList: ArrayList<Sowings>){
@@ -38,6 +39,9 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val currentItem = sowingsList[position]
+        holder.itemView.setOnClickListener {
+            listener.onItemClick(currentItem)
+        }
         holder.culture.text = currentItem.culture?.get("cultureName")
         holder.imageView.minimumWidth = holder.imageView.height
         Glide.with(holder.itemView.context).load(currentItem.culture?.get("imagePath")).into(holder.imageView)
@@ -54,19 +58,13 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
         }
     }
 
-    class MyViewHolder(itemView : View, listener: OnItemClickListener) : RecyclerView.ViewHolder(itemView){
+    class MyViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val culture : TextView = itemView.findViewById(R.id.tvCulture)
         val field : TextView = itemView.findViewById(R.id.tvField)
         val date : TextView = itemView.findViewById(R.id.tvDate)
         val status : TextView = itemView.findViewById(R.id.tvStatus)
         val imageView : ImageView = itemView.findViewById(R.id.imageView)
         val sowingLayout : GridLayout = itemView.findViewById(R.id.sowingLayout)
-
-        init {
-            itemView.setOnClickListener{
-                listener.onItemClick(adapterPosition)
-            }
-        }
     }
 
 }
