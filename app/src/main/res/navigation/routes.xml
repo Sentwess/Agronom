@@ -27,15 +27,7 @@
         android:id="@+id/fieldsFragment"
         android:name="com.example.agronom.fragments.FieldsFragment"
         android:label="@string/fields_string"
-        tools:layout="@layout/fragment_fields" >
-        <action
-            android:id="@+id/action_fieldsFragment_to_fieldsDetailFragment"
-            app:destination="@id/fieldsDetailFragment"
-            app:enterAnim="@anim/from_right"
-            app:exitAnim="@anim/to_left"
-            app:popEnterAnim="@anim/from_left"
-            app:popExitAnim="@anim/to_right" />
-    </fragment>
+        tools:layout="@layout/fragment_fields" />
     <fragment
         android:id="@+id/harvestFragment"
         android:name="com.example.agronom.fragments.HarvestFragment"
@@ -138,22 +130,6 @@
             app:exitAnim="@anim/to_right"
             app:popEnterAnim="@anim/from_right"
             app:popExitAnim="@anim/to_left" />
-    </fragment>
-    <fragment
-        android:id="@+id/fieldsDetailFragment"
-        android:name="com.example.agronom.fragments.FieldsDetailFragment"
-        android:label="Поле"
-        tools:layout="@layout/fragment_fields_detail">
-        <action
-            android:id="@+id/action_fieldsDetailFragment_to_fieldsFragment"
-            app:destination="@id/fieldsFragment"
-            app:enterAnim="@anim/from_left"
-            app:exitAnim="@anim/to_right"
-            app:popEnterAnim="@anim/from_right"
-            app:popExitAnim="@anim/to_left" />
-        <argument
-            android:name="currentField"
-            app:argType="com.example.agronom.data.Fields" />
     </fragment>
     <fragment
         android:id="@+id/sowingsDetailFragment"

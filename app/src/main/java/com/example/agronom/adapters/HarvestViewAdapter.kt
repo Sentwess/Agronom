@@ -67,7 +67,7 @@ class HarvestViewAdapter(private val context: Context, private var harvest: Map<
         tvCulture.text = harvest["culture"].toString()
         tvcultureVarienty.text = harvest["varienty"].toString()
         tvField.text = harvest["field"].toString()
-        tvCount.text = harvest["count"].toString()
+        tvCount.text = harvest["count"].toString() + " т."
         tvDate.text = harvest["date"].toString()
         return view
     }

@@ -158,7 +158,7 @@ class CultureDetailFragment : Fragment() {
 
     private fun openDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_custom, null)
-        val customDialog = AlertDialog.Builder(view?.context)
+        val customDialog = AlertDialog.Builder(view?.context, R.style.my_dialog)
             .setView(dialogView)
             .show()
         customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
@@ -235,7 +235,7 @@ class CultureDetailFragment : Fragment() {
 
     private fun createDialog(messages: MutableList<String>) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_message, null)
-        val customDialog = AlertDialog.Builder(view?.context)
+        val customDialog = AlertDialog.Builder(view?.context, R.style.my_dialog)
             .setView(dialogView)
             .show()
         customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)

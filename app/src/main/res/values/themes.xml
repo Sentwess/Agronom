@@ -3,11 +3,12 @@
     <style name="Base.Theme.Agronom" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
-        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowBackground">@color/window_background</item>
         <item name="colorPrimary">@color/focused</item>
         <item name="colorControlActivated">@color/focused</item>
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:alertDialogTheme">@style/my_dialog</item>
     </style>
 
     <style name="Theme.Agronom" parent="Base.Theme.Agronom" />
