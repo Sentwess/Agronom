@@ -8,7 +8,7 @@
     app:cardCornerRadius="16dp">
 
     <LinearLayout
-        android:background="#fafafa"
+        android:background="@color/card_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">

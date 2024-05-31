@@ -10,5 +10,10 @@
     <color name="blue">#3E5481</color>
     <color name="mText">#2E3E5C</color>
     <color name="gray">#a2a2a2</color>
+    <color name="text_color">#2E3E5C</color>
+    <color name="status_text">#FF000000</color>
+    <color name="card_background">#FFF</color>
     <color name="light_gray">#eeeeee</color>
+    <color name="window_background">#FFF</color>
+    <color name="sowing_background">#eeeeee</color>
 </resources>

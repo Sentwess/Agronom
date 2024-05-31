@@ -49,11 +49,11 @@ class SowingsAdapter (private var sowingsList : ArrayList<Sowings>) : RecyclerVi
         holder.date.text = currentItem.date
         if(currentItem.status!!){
             holder.status.text = "Засеян"
-            holder.sowingLayout.setBackgroundResource(android.R.color.transparent)
+            holder.sowingLayout.setBackgroundResource(R.color.window_background)
         }
         else{
             holder.status.text = "Завершён"
-            holder.sowingLayout.setBackgroundResource(R.color.light_gray)
+            holder.sowingLayout.setBackgroundResource(R.color.sowing_background)
             holder.status.setTextColor(Color.parseColor("#a2a2a2"))
         }
     }

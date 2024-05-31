@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.agronom.databinding.FragmentSignInBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -40,19 +41,22 @@ class SignInFragment : Fragment() {
             val pass = binding.passEt.text.toString()
 
             if (email.isNotEmpty() && pass.isNotEmpty())
-
                 loginUser(email, pass)
             else
-                Toast.makeText(context, "Введите почту и пароль", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),"Введите почту и пароль", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun loginUser(email: String, pass: String) {
         mAuth.signInWithEmailAndPassword(email, pass).addOnCompleteListener {
-            if (it.isSuccessful)
+            if (it.isSuccessful) {
                 navController.navigate(SignInFragmentDirections.actionSignInFragmentToSowingFragment())
-            else
-                Toast.makeText(context, "Неверно указана почта или пароль", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Вы вошли в аккаунт", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Snackbar.make(requireView(), "Неверно указана почта или пароль", Toast.LENGTH_SHORT)
+                    .show()
+            }
 
         }
     }

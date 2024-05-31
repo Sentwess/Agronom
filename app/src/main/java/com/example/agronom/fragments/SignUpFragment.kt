@@ -14,9 +14,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.agronom.R
 import com.example.agronom.databinding.FragmentSignUpBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import java.util.UUID
 
 /**
  * A simple [Fragment] subclass.
@@ -101,17 +101,17 @@ class SignUpFragment : Fragment() {
                     "email" to email,
                     "user uid" to task.result.user?.uid
                 )
-                db.collection("Users").document(UUID.randomUUID().toString()).set(user)
+                db.collection("Users").document(task.result.user?.uid.toString()).set(user)
                     .addOnSuccessListener {
                     }
                     .addOnFailureListener {
                     }
                 navController.navigate(SignUpFragmentDirections.actionSignUpFragmentToSignInFragment())
                 mAuth.signOut()
-                Toast.makeText(requireActivity(), "Аккаунт зарегистрирован", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Аккаунт зарегистрирован", Toast.LENGTH_SHORT).show()
             }
             else {
-                Toast.makeText(requireActivity(), "Не удалось зарегистрироваться", Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(), "Не удалось зарегистрироваться", Toast.LENGTH_SHORT).show()
             }
 
         }

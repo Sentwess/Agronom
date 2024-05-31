@@ -77,7 +77,7 @@ class FieldsFragment : Fragment() {
         fieldsRecyclerView.setHasFixedSize(true)
 
         fieldsArrayList = arrayListOf<Fields>()
-        fieldsAdapter = FieldsAdapter(fieldsArrayList)
+        fieldsAdapter = FieldsAdapter(fieldsArrayList, requireContext())
         fieldsRecyclerView.adapter = fieldsAdapter
 
         getFieldsData()
@@ -104,7 +104,9 @@ class FieldsFragment : Fragment() {
 
     private fun openDeleteDialog(field: Fields, dialogEdit: AlertDialog) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_custom, null)
-        val customDialog = AlertDialog.Builder(view?.context).setView(dialogView).show()
+        val customDialog = AlertDialog.Builder(view?.context, R.style.my_dialog)
+            .setView(dialogView)
+            .show()
         customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)
         val btDismiss = dialogView.findViewById<Button>(R.id.btDismissCustomDialog)
         val btPositive = dialogView.findViewById<Button>(R.id.btPositiveCustomDialog)
@@ -187,7 +189,7 @@ class FieldsFragment : Fragment() {
 
     private fun createDialog(messages: MutableList<String>) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_message, null)
-        val customDialog = AlertDialog.Builder(view?.context)
+        val customDialog = AlertDialog.Builder(view?.context, R.style.my_dialog)
             .setView(dialogView)
             .show()
         customDialog.window?.setBackgroundDrawableResource(R.drawable.dialog_border)

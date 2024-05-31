@@ -80,7 +80,7 @@
                         android:id="@+id/tvName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="Пшеница"
                         android:theme="@style/EditTextStyle"/>
 
@@ -118,7 +118,7 @@
                         android:id="@+id/tvVarienty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="Ликамеро"
                         android:theme="@style/EditTextStyle"/>
 
@@ -156,7 +156,7 @@
                             android:id="@+id/tvBoardingMonth"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/mText"
+                            android:textColor="@color/text_color"
                             android:hint="Весна"
                             android:theme="@style/EditTextStyle"/>
 
@@ -194,7 +194,7 @@
                         android:id="@+id/tvGrowingSeason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="80 - 90 дней"
                         android:theme="@style/EditTextStyle"/>
 
@@ -208,6 +208,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
+                android:textColor="@color/white"
                 android:backgroundTint="@color/focused"
                 android:fontFamily="@font/poppins_semibold"
                 android:text="Сохранить"

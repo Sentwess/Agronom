@@ -5,6 +5,6 @@
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
-    android:textColor="@color/black"
+    android:textColor="@color/text_color"
     android:ellipsize="marquee"
     android:textSize="20sp" />

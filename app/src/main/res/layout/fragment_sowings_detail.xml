@@ -54,7 +54,7 @@
                     android:dropDownAnchor="@id/fieldLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/mText"
+                    android:textColor="@color/text_color"
                     android:theme="@style/EditTextStyle"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +105,7 @@
                         android:dropDownAnchor="@id/cultureLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:theme="@style/EditTextStyle"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -146,7 +146,7 @@
                         android:dropDownHeight="200dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:theme="@style/EditTextStyle"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -197,7 +197,7 @@
                         android:id="@+id/tvCount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="27"
                         android:theme="@style/EditTextStyle"/>
 
@@ -237,7 +237,7 @@
                         android:id="@+id/tvDateStart"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="08.04.2024"
                         android:theme="@style/EditTextStyle"/>
 
@@ -291,7 +291,7 @@
                         android:id="@+id/tvCountHarvest"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="52"
                         android:theme="@style/EditTextStyle"/>
 
@@ -332,7 +332,7 @@
                         android:inputType="none"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/mText"
+                        android:textColor="@color/text_color"
                         android:hint="12.09.2024"
                         android:theme="@style/EditTextStyle"/>
 
@@ -374,6 +374,7 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="70dp"
+                android:textColor="@color/white"
                 android:layout_marginHorizontal="5dp"
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"
@@ -388,6 +389,7 @@
                 android:layout_weight="1"
                 android:layout_height="70dp"
                 android:layout_marginHorizontal="5dp"
+                android:textColor="@color/white"
                 android:fontFamily="@font/poppins_medium"
                 android:textSize="18sp"
                 android:backgroundTint="@color/yellow"

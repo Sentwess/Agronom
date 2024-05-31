@@ -21,6 +21,7 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
+        android:background="@color/card_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -54,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Восточное"
-                android:textColor="@color/mText"
+                android:textColor="@color/text_color"
                 android:theme="@style/EditTextStyle" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -134,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="52 Га"
-                android:textColor="@color/mText"
+                android:textColor="@color/text_color"
                 android:theme="@style/EditTextStyle" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -178,6 +179,7 @@
                     android:id="@+id/saveBtn"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:textColor="@color/white"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/poppins_medium"
                     android:text="Сохранить"

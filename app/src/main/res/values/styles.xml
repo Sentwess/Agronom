@@ -61,4 +61,15 @@
         <item name="cornerSizeBottomLeft">0dp</item>
     </style>
 
+    <style name="NavigationViewStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:listPreferredItemHeightSmall">40dp</item>
+    </style>
+
+    <style name="my_dialog" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowMinWidthMajor">90%</item>
+        <item name="android:windowMinWidthMinor">90%</item>
+        <item name="colorAccent">@color/card_background</item>
+    </style>
+
 </resources>

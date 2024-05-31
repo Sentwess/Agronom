@@ -1,17 +1,18 @@
 package com.example.agronom.adapters
 
+import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.agronom.R
 import com.example.agronom.data.Fields
 
-class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.Adapter<FieldsAdapter.MyViewHolder>() {
-
+class FieldsAdapter(private var fieldsList : ArrayList<Fields>, private val context: Context) : RecyclerView.Adapter<FieldsAdapter.MyViewHolder>() {
     private lateinit var listener: OnItemClickListener
 
     fun setOnItemClickListener(listener: OnItemClickListener) {
@@ -49,7 +50,7 @@ class FieldsAdapter(private var fieldsList : ArrayList<Fields>) : RecyclerView.A
         }
         else{
             holder.status.text = "Свободно"
-            holder.status.setTextColor(Color.parseColor("#FF000000"))
+            holder.status.setTextColor(ContextCompat.getColor(context, R.color.status_text))
         }
     }
 
