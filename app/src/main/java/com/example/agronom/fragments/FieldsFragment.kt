@@ -140,7 +140,6 @@ class FieldsFragment : Fragment() {
         val toggleButton = dialogView.findViewById<MaterialButtonToggleGroup>(R.id.toggleButton)
 
         if (field.docId != null) {
-
             if (field.status!!) {
                 (toggleButton.getChildAt(1) as MaterialButton).isChecked = true
             } else {
@@ -152,7 +151,6 @@ class FieldsFragment : Fragment() {
             btnSave.text = "Изменить"
         } else {
             btDelete.isVisible = false
-
             btnSave.text = "Добавить"
         }
         btDismiss.setOnClickListener {

@@ -27,6 +27,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="-15dp"
                 android:layout_height="wrap_content">
 
                 <Button
@@ -34,7 +35,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="-15dp"
                     android:layout_marginStart="-10dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/poppins_semibold"
@@ -49,7 +49,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:layout_marginTop="-15dp"
                     android:layout_marginEnd="-10dp"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/poppins_semibold"
@@ -65,8 +64,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="15dp"
                 app:cardBackgroundColor="@android:color/transparent">
 
                     <ImageView
@@ -124,9 +123,9 @@
                 />
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/fieldLayout"
-                android:paddingHorizontal="15dp"
+                android:visibility="gone"
+                android:paddingHorizontal="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -204,7 +203,7 @@
 
             <LinearLayout
                 android:visibility="gone"
-                android:paddingHorizontal="15dp"
+                android:paddingHorizontal="5dp"
                 android:id="@+id/cultureLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -329,7 +328,7 @@
 
             <LinearLayout
                 android:visibility="gone"
-                android:paddingHorizontal="15dp"
+                android:paddingHorizontal="5dp"
                 android:id="@+id/sowingLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
