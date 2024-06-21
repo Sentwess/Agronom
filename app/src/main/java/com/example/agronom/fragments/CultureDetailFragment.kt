@@ -32,6 +32,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.IOException
 import java.util.UUID
@@ -119,18 +120,13 @@ class CultureDetailFragment : Fragment() {
                 menuInflater.inflate(R.menu.edit_menu, menu)
                 val myMenuItem = menu.findItem(R.id.editBtn)
                 saveBtn.setOnClickListener {
+                    myMenuItem?.setIcon(R.drawable.edit_icon)
+                    saveBtn.isEnabled = false
                     if(filePath != null){
                         uploadImage()
                     }
                     else{
                         updateData(culture.imagePath!!)
-                    }
-
-                    if(isEditMode){
-                        myMenuItem?.setIcon(R.drawable.cancel_ic)
-                    }
-                    else{
-                        myMenuItem?.setIcon(R.drawable.edit_icon)
                     }
                 }
             }
@@ -145,6 +141,7 @@ class CultureDetailFragment : Fragment() {
                         menuItem.setIcon(R.drawable.cancel_ic)
                     }
                     showData(false)
+                    saveBtn.isEnabled = true
                     isEditMode = !isEditMode
                 }
                 if (id == R.id.deleteBtn) {
@@ -174,14 +171,31 @@ class CultureDetailFragment : Fragment() {
 
     private fun deleteData(){
         db = FirebaseFirestore.getInstance()
-        db.collection("Cultures").document(culture.docId.toString()).delete()
-            .addOnSuccessListener {
-                Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
-            }
-        findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
+        runBlocking {
+            db.collection("Sowings")
+                .whereEqualTo("culture.docId", culture.docId)
+                .get()
+                .addOnSuccessListener { querySnapshot ->
+                    // Handle the success case
+                    if(querySnapshot.documents.size > 0){
+                        Snackbar.make(requireView(), "Нельзя удалить культуру которая была посажена хотя-бы раз", Snackbar.LENGTH_SHORT).show()
+                    }
+                    else{
+                        db.collection("Cultures").document(culture.docId.toString()).delete()
+                            .addOnSuccessListener {
+                                Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
+                            }
+                        findNavController().navigate(CultureDetailFragmentDirections.actionCultureDetailFragmentToCulturesFragment())
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle the failure case
+                    // ...
+                }
+        }
     }
 
     private fun launchGallery() {

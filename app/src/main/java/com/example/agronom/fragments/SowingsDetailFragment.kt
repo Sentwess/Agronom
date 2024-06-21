@@ -223,6 +223,17 @@ class SowingsDetailFragment : Fragment() {
         db = FirebaseFirestore.getInstance()
         db.collection("Sowings").document(sowingData.docId.toString()).delete()
             .addOnSuccessListener {
+                if(sowingData.status!!){
+                    val updates = mapOf(
+                        "status" to false
+                    )
+                    db.collection("Fields").document(sowingData.field!!.get("docId").toString()).update(updates)
+                        .addOnSuccessListener {
+
+                        }.addOnFailureListener {
+
+                        }
+                }
                 Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
                 findNavController().navigate(SowingsDetailFragmentDirections.actionSowingsDetailFragmentToSowingsFragment())
             }

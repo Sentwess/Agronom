@@ -35,6 +35,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.QuerySnapshot
+import kotlinx.coroutines.runBlocking
 import java.util.Locale
 import java.util.UUID
 
@@ -115,15 +116,34 @@ class FieldsFragment : Fragment() {
         }
         btPositive.setOnClickListener {
             db = FirebaseFirestore.getInstance()
-            db.collection("Fields").document(field.docId.toString()).delete().addOnSuccessListener {
-                    Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
-                }
-            customDialog.dismiss()
-            dialogEdit.dismiss()
-            fieldsArrayList.clear()
-            getFieldsData()
+            runBlocking {
+                db.collection("Sowings")
+                    .whereEqualTo("field.docId", field.docId)
+                    .get()
+                    .addOnSuccessListener { querySnapshot ->
+                        // Handle the success case
+                        if(querySnapshot.documents.size > 0){
+                            Snackbar.make(requireView(), "Нельзя удалить поле которое было засеяно хотя-бы раз", Snackbar.LENGTH_SHORT).show()
+                            customDialog.dismiss()
+                            dialogEdit.dismiss()
+                        }
+                        else{
+                            db.collection("Fields").document(field.docId.toString()).delete().addOnSuccessListener {
+                                Snackbar.make(requireView(), "Данные удалены", Snackbar.LENGTH_SHORT).show()
+                            }.addOnFailureListener {
+                                Snackbar.make(requireView(), "Ошибка", Snackbar.LENGTH_SHORT).show()
+                            }
+                            customDialog.dismiss()
+                            dialogEdit.dismiss()
+                            fieldsArrayList.clear()
+                            getFieldsData()
+                        }
+                    }
+                    .addOnFailureListener { exception ->
+                        // Handle the failure case
+                        // ...
+                    }
+            }
         }
     }
 
@@ -210,6 +230,7 @@ class FieldsFragment : Fragment() {
         if (fieldData.docId != null) {
             db.collection("Fields").document(fieldData.docId.toString()).update(updates)
                 .addOnSuccessListener {
+                    Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
                     fieldsArrayList.clear()
                     getFieldsData()
                 }.addOnFailureListener {
@@ -268,11 +289,12 @@ class FieldsFragment : Fragment() {
         } else {
             fieldData.docId = UUID.randomUUID().toString()
             db.collection("Fields").document(fieldData.docId!!).set(updates).addOnSuccessListener {
-                    fieldsArrayList.clear()
-                    getFieldsData()
-                }.addOnFailureListener {
+                Snackbar.make(requireView(), "Запись о новом поле создана", Snackbar.LENGTH_SHORT).show()
+                fieldsArrayList.clear()
+                getFieldsData()
+            }.addOnFailureListener {
 
-                }
+            }
         }
     }
 
