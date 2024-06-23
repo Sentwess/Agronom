@@ -2,7 +2,9 @@ package com.example.agronom.fragments
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
@@ -81,7 +83,12 @@ class CultureDetailFragment : Fragment() {
         if(culture.docId == null) {
             saveBtn.setOnClickListener {
                 if (filePath != null) {
-                    uploadImage()
+                    val isConnected = isNetworkAvailable(requireContext())
+                    if (isConnected) {
+                        uploadImage()
+                    } else {
+                        updateData("https://firebasestorage.googleapis.com/v0/b/agronom-e52c4.appspot.com/o/images%2Fwheat.png?alt=media&token=fc45c7d6-abb1-4dbf-b930-73d49202a24d")
+                    }
                 } else {
                     updateData(culture.imagePath!!)
                 }
@@ -222,8 +229,13 @@ class CultureDetailFragment : Fragment() {
         }
     }
 
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
+    }
+
     private fun uploadImage(){
-        println("uploadImage")
         val fileName = File(filePath.toString()).name
         val ref = storageReference?.child("images/$fileName")
             val uploadTask = ref?.putFile(filePath!!)
@@ -238,7 +250,8 @@ class CultureDetailFragment : Fragment() {
                 if (task.isSuccessful) {
                     filePath = null
                     updateData(task.result.toString())
-                } else {
+                } else
+                {
                     // Handle failures
                 }
             }?.addOnFailureListener{
@@ -262,7 +275,6 @@ class CultureDetailFragment : Fragment() {
     }
 
     private fun updateData(uri : String){
-        println("updateData")
         culture.cultureName = tvName.text.toString()
         culture.varienty = tvVarienty.text.toString()
         culture.boardingMonth = tvBoardingMonth.text.toString()

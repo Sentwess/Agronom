@@ -228,9 +228,9 @@ class FieldsFragment : Fragment() {
             "status" to fieldData.status
         )
         if (fieldData.docId != null) {
+            Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
             db.collection("Fields").document(fieldData.docId.toString()).update(updates)
                 .addOnSuccessListener {
-                    Snackbar.make(requireView(), "Данные сохранены", Snackbar.LENGTH_SHORT).show()
                     fieldsArrayList.clear()
                     getFieldsData()
                 }.addOnFailureListener {
@@ -289,12 +289,12 @@ class FieldsFragment : Fragment() {
         } else {
             fieldData.docId = UUID.randomUUID().toString()
             db.collection("Fields").document(fieldData.docId!!).set(updates).addOnSuccessListener {
-                Snackbar.make(requireView(), "Запись о новом поле создана", Snackbar.LENGTH_SHORT).show()
                 fieldsArrayList.clear()
                 getFieldsData()
             }.addOnFailureListener {
 
             }
+            Snackbar.make(requireView(), "Запись о новом поле создана", Snackbar.LENGTH_SHORT).show()
         }
     }
 
